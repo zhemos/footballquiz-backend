@@ -1,11 +1,12 @@
 package com.zm.modules.injection
 
-import com.zm.modules.admin.AdminController
-import com.zm.modules.admin.AdminControllerImpl
+import com.zm.modules.auth.*
+import com.zm.modules.user.*
 import org.koin.dsl.module
 
 object ModulesInjection {
     val koinBeans = module {
-        single<AdminController> { AdminControllerImpl() }
+        single<AuthController> { AuthControllerImpl() }
+        single<UserController> { UserControllerImpl() }
     }
 }
