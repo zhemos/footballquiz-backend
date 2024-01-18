@@ -1,5 +1,6 @@
 package com.zm.modules.user
 
+import com.zm.model.successResult
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.auth.jwt.*
@@ -14,8 +15,10 @@ fun Route.userModule() {
     route("user") {
         get {
             val principal = call.principal<JWTPrincipal>()
-            val login = principal?.payload?.getClaim("login")?.asString()
-            call.respondText("$login")
+            principal?.payload?.getClaim("id")?.asInt()?.let { userId ->
+                val user = controller.getUserById(userId)
+                call.respond(successResult(user))
+            }
         }
     }
 }

@@ -4,5 +4,5 @@ import com.zm.model.User
 
 interface UserController {
 
-    suspend fun getUser(token: String): User?
+    suspend fun getUserById(id: Int): User?
 }

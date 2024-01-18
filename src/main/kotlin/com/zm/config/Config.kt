@@ -6,6 +6,7 @@ import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
 import com.zm.model.CredentialsResponse
 import com.zm.model.User
+import com.zm.statuspages.ApplicationException
 import java.util.*
 
 class Config(
@@ -44,7 +45,14 @@ class JwtConfig(
     }
 
     override fun verifyToken(token: String): Int? {
-        return verifier.verify(token).claims["id"]?.asInt()
+        return try {
+            verifier.verify(token).claims["ati"]?.let {
+                return null
+            }
+            verifier.verify(token).claims["id"]?.asInt()
+        } catch (e: Exception) {
+            throw ApplicationException.RefreshTokenException
+        }
     }
 
     private fun createAccessToken(jwtBuilder: JWTCreator.Builder): String {
@@ -65,7 +73,7 @@ class JwtConfig(
     }
 }
 
-private const val VALIDITY_IN_MS = 1000L * 30L * 1L // 5 mins
+private const val VALIDITY_IN_MS = 1000L * 60L * 1L // 1 min
 private const val REFRESH_VALIDITY_IN_MS = 3_600_000L * 24L * 60L //60 days
 
 interface TokenProvider {

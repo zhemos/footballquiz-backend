@@ -7,12 +7,10 @@ import com.zm.api.user.UserApi
 import com.zm.config.Config
 import com.zm.config.JwtConfig
 import com.zm.config.TokenProvider
-import com.zm.modules.auth.authenticationModule
 import com.zm.modules.injection.ModulesInjection
 import com.zm.plugins.*
 import com.zm.plugins.configureRouting
 import io.ktor.server.application.*
-import io.ktor.server.auth.*
 import io.ktor.server.config.*
 import io.ktor.server.engine.*
 import io.ktor.server.netty.*
@@ -21,7 +19,6 @@ import org.koin.ktor.ext.inject
 import org.koin.ktor.plugin.Koin
 
 fun main() {
-//    embeddedServer(Netty, port = 8080, host = "0.0.0.0", module = Application::module).start(wait = true)
     val environment = System.getenv()["ENVIRONMENT"] ?: handleDefaultEnvironment()
     val config = extractConfig(environment, HoconApplicationConfig(ConfigFactory.load()))
     embeddedServer(Netty, host = config.host, port = config.port) {
@@ -68,7 +65,8 @@ fun extractConfig(environment: String, hoconConfig: HoconApplicationConfig): Con
 fun Application.initModules(jwtConfig: JwtConfig) {
     val userApi by inject<UserApi>()
     val jwtVerifier by inject<JWTVerifier>()
-    authenticationModule(userApi, jwtConfig, jwtVerifier)
+    configureAuthentication(userApi, jwtConfig, jwtVerifier)
+    configureStatusPages()
     configureMonitoring()
     configureSerialization()
     configureRouting()

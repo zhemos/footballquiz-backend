@@ -1,3 +1,13 @@
 package com.zm.statuspages
 
-data class AuthenticationException(override val message: String = "Authentication failed") : Exception()
+import io.ktor.server.plugins.statuspages.*
+import io.ktor.server.response.*
+
+fun StatusPagesConfig.authStatusPages() {
+    exception<ApplicationException.UnauthorizedException> { call, cause ->
+        call.respond(cause.statusCode, cause.response)
+    }
+    exception<ApplicationException.RefreshTokenException> { call, cause ->
+        call.respond(cause.statusCode, cause.response)
+    }
+}

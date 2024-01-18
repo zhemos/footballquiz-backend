@@ -6,7 +6,7 @@ import com.zm.model.CredentialsResponse
 import com.zm.model.LoginCredentials
 import com.zm.model.RefreshBody
 import com.zm.modules.BaseController
-import com.zm.statuspages.AuthenticationException
+import com.zm.statuspages.ApplicationException
 import org.koin.core.component.inject
 
 class AuthControllerImpl : BaseController(), AuthController {
@@ -16,15 +16,16 @@ class AuthControllerImpl : BaseController(), AuthController {
 
     override suspend fun login(credentials: LoginCredentials): CredentialsResponse {
         userApi.getUserByLogin(credentials.login)?.let { user ->
+            //todo check password
             return tokenProvider.createTokens(user)
-        } ?: throw AuthenticationException("Wrong credentials")
+        } ?: throw ApplicationException.DataNotFound
     }
 
     override suspend fun refreshToken(refreshBody: RefreshBody): CredentialsResponse {
         tokenProvider.verifyToken(refreshBody.refreshToken)?.let { userId ->
             userApi.getUserById(userId)?.let { user ->
                 return tokenProvider.createTokens(user)
-            } ?: throw AuthenticationException("Wrong credentials")
-        } ?: throw AuthenticationException("Wrong credentials")
+            } ?: throw ApplicationException.DataNotFound
+        } ?: throw ApplicationException.RefreshTokenException
     }
 }

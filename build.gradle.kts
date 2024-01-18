@@ -36,6 +36,7 @@ dependencies {
     implementation("io.insert-koin:koin-ktor:$koin_ktor_version")
     implementation("io.ktor:ktor-server-auth:$ktor_version")
     implementation("io.ktor:ktor-server-auth-jwt:$ktor_version")
+    implementation("io.ktor:ktor-server-status-pages:$ktor_version")
 
     //Testing
     testImplementation("io.ktor:ktor-server-tests-jvm")
