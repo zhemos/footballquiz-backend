@@ -7,9 +7,14 @@ import com.zm.api.user.UserApi
 import com.zm.config.Config
 import com.zm.config.JwtConfig
 import com.zm.config.TokenProvider
+import com.zm.db.DatabaseProvider
+import com.zm.db.DatabaseProviderContract
+import com.zm.db.injection.DaoInjection
 import com.zm.modules.injection.ModulesInjection
 import com.zm.plugins.*
 import com.zm.plugins.configureRouting
+import com.zm.util.PasswordManager
+import com.zm.util.PasswordManagerContract
 import io.ktor.server.application.*
 import io.ktor.server.config.*
 import io.ktor.server.engine.*
@@ -28,11 +33,14 @@ fun main() {
                 modules(
                     module {
                         single { config }
+                        single<DatabaseProviderContract> { DatabaseProvider() }
                         single<TokenProvider> { config.jwt }
+                        single<PasswordManagerContract> { PasswordManager }
                         single<JWTVerifier> { config.jwt.verifier }
                     },
                     ApiInjection.koinBeans,
                     ModulesInjection.koinBeans,
+                    DaoInjection.koinBeans
                 )
             }
             initModules(config.jwt)
@@ -64,7 +72,9 @@ fun extractConfig(environment: String, hoconConfig: HoconApplicationConfig): Con
 
 fun Application.initModules(jwtConfig: JwtConfig) {
     val userApi by inject<UserApi>()
+    val databaseProvider by inject<DatabaseProviderContract>()
     val jwtVerifier by inject<JWTVerifier>()
+    databaseProvider.init()
     configureAuthentication(userApi, jwtConfig, jwtVerifier)
     configureStatusPages()
     configureMonitoring()

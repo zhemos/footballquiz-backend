@@ -1,5 +1,13 @@
 package com.zm.model
 
+data class CreateUserBody(
+    val login: String,
+    val email: String,
+    val password: String,
+    val dateOfBirth: String,
+    val country: String
+)
+
 data class LoginCredentials(
     val login: String,
     val password: String

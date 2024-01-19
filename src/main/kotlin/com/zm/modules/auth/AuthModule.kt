@@ -1,9 +1,6 @@
 package com.zm.modules.auth
 
-import com.zm.model.LoginCredentials
-import com.zm.model.RefreshBody
-import com.zm.model.receive
-import com.zm.model.successResult
+import com.zm.model.*
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -14,6 +11,20 @@ fun Route.authModule() {
     val controller by inject<AuthController>()
 
     route("auth") {
+
+        post("register/admin") {
+            receive<CreateUserBody> { createUserBody ->
+                val credentialsResponse = controller.createUser(createUserBody)
+                call.respond(successResult(credentialsResponse))
+            }
+        }
+
+        post("register/user") {
+            receive<CreateUserBody> { createUserBody ->
+                println(createUserBody)
+            }
+        }
+
         post("login") {
             receive<LoginCredentials> { loginCredentials ->
                 val credentialsResponse = controller.login(loginCredentials)

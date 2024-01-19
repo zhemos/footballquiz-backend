@@ -15,7 +15,13 @@ class Config(
     val databaseHost: String,
     val databasePort: String,
     val jwt: JwtConfig
-)
+) {
+    companion object {
+        const val DATABASE_NAME: String = "footballquiz"
+        const val DATABASE_USER: String = "root"
+        const val DATABASE_PASSWORD: String = "root"
+    }
+}
 
 class JwtConfig(
     val secret: String,
@@ -51,7 +57,7 @@ class JwtConfig(
             }
             verifier.verify(token).claims["id"]?.asInt()
         } catch (e: Exception) {
-            throw ApplicationException.RefreshTokenException
+            throw ApplicationException.RefreshToken
         }
     }
 

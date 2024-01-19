@@ -7,26 +7,28 @@ sealed class ApplicationException(message: String) : Exception(message) {
 
     abstract val statusCode: HttpStatusCode
     abstract val code: Code
-    abstract val response: WrapperResponse<Nothing>
+    val response: WrapperResponse<Nothing> = createResponse()
 
     protected fun createResponse() = WrapperResponse(code = code.value, data = null, error = message)
 
-    data object UnauthorizedException : ApplicationException(message = "token exception") {
+    data object Unauthorized : ApplicationException(message = "token exception") {
         override val statusCode: HttpStatusCode get() = HttpStatusCode.Unauthorized
         override val code: Code get() = Code.UNAUTHORIZED
-        override val response: WrapperResponse<Nothing> get() = createResponse()
     }
 
-    data object RefreshTokenException : ApplicationException(message = "refresh token exception") {
+    data object UserWasAlreadyCreated : ApplicationException(message = "User was already created") {
+        override val statusCode: HttpStatusCode get() = HttpStatusCode.OK
+        override val code: Code get() = Code.SUCCESS
+    }
+
+    data object RefreshToken : ApplicationException(message = "refresh token exception") {
         override val statusCode: HttpStatusCode get() = HttpStatusCode.BadRequest
         override val code: Code get() = Code.DECLINE
-        override val response: WrapperResponse<Nothing> get() = createResponse()
     }
 
     data object DataNotFound : ApplicationException(message = "Data not found") {
         override val statusCode: HttpStatusCode get() = HttpStatusCode.BadRequest
         override val code: Code get() = Code.DATA_NOT_FOUND
-        override val response: WrapperResponse<Nothing> get() = createResponse()
     }
 }
 

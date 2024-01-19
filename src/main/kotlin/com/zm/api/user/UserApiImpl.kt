@@ -1,21 +1,30 @@
 package com.zm.api.user
 
+import com.zm.db.dao.UserDao
+import com.zm.model.CreateUserBody
 import com.zm.model.User
+import com.zm.util.PasswordManagerContract
 import org.koin.core.component.KoinComponent
+import org.koin.core.component.inject
 
 object UserApiImpl : UserApi, KoinComponent {
 
-    private val users = listOf(
-        User(1, "root", "root", ""),
-        User(2, "root16", "root", ""),
-        User(3, "root32", "root", "")
-    )
+    private val usersDao by inject<UserDao>()
+    private val passwordEncryption by inject<PasswordManagerContract>()
+
+    override fun createUser(createUserBody: CreateUserBody): User? {
+        val encryptedUser = createUserBody.copy(
+            password = passwordEncryption.encryptPassword(createUserBody.password)
+        )
+        val key = usersDao.insertUser(encryptedUser)
+        TODO("Not yet implemented")
+    }
 
     override fun getUserById(id: Int): User? {
-        return users.find { it.id == id }
+        return null
     }
 
     override fun getUserByLogin(login: String): User? {
-        return users.find { it.login == login }
+        return usersDao.getUserByLogin(login)
     }
 }
