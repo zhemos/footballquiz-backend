@@ -2,11 +2,16 @@
 val ktor_version: String by project
 val kotlin_version: String by project
 val logback_version: String by project
+val koin_version: String by project
 val koin_ktor_version: String by project
 val exposed_version: String by project
 val hikari_version: String by project
 val mysql_version: String by project
 val bcrypt_version: String by project
+
+val assert_j_version: String by project
+val junit_version: String by project
+val mock_version: String by project
 
 plugins {
     kotlin("jvm") version "1.9.22"
@@ -51,6 +56,12 @@ dependencies {
     implementation("org.mindrot:jbcrypt:$bcrypt_version")
 
     //Testing
+    testImplementation("io.insert-koin:koin-test:$koin_version")
+    testImplementation("io.ktor:ktor-server-test-host:$ktor_version")
+    testImplementation("org.assertj:assertj-core:$assert_j_version")
+    testImplementation("org.junit.jupiter:junit-jupiter:$junit_version")
+    testRuntimeOnly("org.junit.jupiter:junit-jupiter-engine:$junit_version")
+    testImplementation("io.mockk:mockk:$mock_version")
     testImplementation("io.ktor:ktor-server-tests-jvm")
     testImplementation("org.jetbrains.kotlin:kotlin-test-junit:$kotlin_version")
 }

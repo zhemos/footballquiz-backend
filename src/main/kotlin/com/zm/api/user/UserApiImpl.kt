@@ -16,8 +16,10 @@ object UserApiImpl : UserApi, KoinComponent {
         val encryptedUser = createUserBody.copy(
             password = passwordEncryption.encryptPassword(createUserBody.password)
         )
-        val key = usersDao.insertUser(encryptedUser)
-        TODO("Not yet implemented")
+        usersDao.insertUser(encryptedUser)?.let { userId ->
+            return usersDao.getUserById(userId)
+        }
+        return null
     }
 
     override fun getUserById(id: Int): User? {
@@ -26,5 +28,9 @@ object UserApiImpl : UserApi, KoinComponent {
 
     override fun getUserByLogin(login: String): User? {
         return usersDao.getUserByLogin(login)
+    }
+
+    override fun getUserByLoginOrEmail(login: String, email: String): User? {
+        return usersDao.getUserByLoginOrEmail(login, email)
     }
 }

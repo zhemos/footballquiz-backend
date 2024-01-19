@@ -8,19 +8,22 @@ import com.zm.model.LoginCredentials
 import com.zm.model.RefreshBody
 import com.zm.modules.BaseController
 import com.zm.statuspages.ApplicationException
+import com.zm.util.DateManagerContract
 import org.koin.core.component.inject
 
 class AuthControllerImpl : BaseController(), AuthController {
 
     private val userApi by inject<UserApi>()
     private val tokenProvider by inject<TokenProvider>()
+    private val dateManager by inject<DateManagerContract>()
 
     override suspend fun createUser(createUserBody: CreateUserBody): CredentialsResponse {
+        createUserBody.getRegisterExceptionOrNull(dateManager)?.let { exception -> throw exception }
         val user = dbQuery {
-            userApi.getUserByLogin(createUserBody.login)?.let {
-                throw ApplicationException.UserWasAlreadyCreated
+            userApi.getUserByLoginOrEmail(createUserBody.login, createUserBody.email)?.let {
+                throw ApplicationException.Register.UserWasAlreadyCreated
             }
-            userApi.createUser(createUserBody) ?: throw UnknownError("Internal server error")
+            userApi.createUser(createUserBody) ?: throw ApplicationException.Unknown
         }
         return tokenProvider.createTokens(user)
     }

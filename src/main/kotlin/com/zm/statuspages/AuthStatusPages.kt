@@ -10,4 +10,22 @@ fun StatusPagesConfig.authStatusPages() {
     exception<ApplicationException.RefreshToken> { call, cause ->
         call.respond(cause.statusCode, cause.response)
     }
+    exception<ApplicationException.Register.IncorrectLogin> { call, cause ->
+        call.respond(cause.statusCode, cause.response)
+    }
+    exception<ApplicationException.Register.IncorrectEmail> { call, cause ->
+        call.respond(cause.statusCode, cause.response)
+    }
+    exception<ApplicationException.Register.IncorrectPassword> { call, cause ->
+        call.respond(cause.statusCode, cause.response)
+    }
+    exception<ApplicationException.Register.IncorrectDateOfBirth> { call, cause ->
+        call.respond(cause.statusCode, cause.response)
+    }
+    exception<ApplicationException.Register.CountryIsEmpty> { call, cause ->
+        call.respond(cause.statusCode, cause.response)
+    }
+    exception<ApplicationException.Register.UserWasAlreadyCreated> { call, cause ->
+        call.respond(cause.statusCode, cause.response)
+    }
 }
