@@ -20,7 +20,6 @@ sealed class ApplicationException(message: String) : Exception(message) {
 
     sealed class Register(message: String) : ApplicationException(message = message) {
         override val statusCode: HttpStatusCode get() = HttpStatusCode.OK
-<<<<<<< HEAD
         override val code: Code get() = Code.DECLINE
     }
 
@@ -37,8 +36,6 @@ sealed class ApplicationException(message: String) : Exception(message) {
     data object IncorrectPassword : ApplicationException(message = "Incorrect password") {
         override val statusCode: HttpStatusCode get() = HttpStatusCode.OK
         override val code: Code get() = Code.DECLINE
-=======
-        override val code: Code get() = Code.SUCCESS
 
         data object IncorrectLogin : Register(message = "Login is incorrect") {
             private fun readResolve(): Any = UserWasAlreadyCreated
@@ -63,7 +60,6 @@ sealed class ApplicationException(message: String) : Exception(message) {
         data object UserWasAlreadyCreated : Register(message = "User was already created") {
             private fun readResolve(): Any = UserWasAlreadyCreated
         }
->>>>>>> origin/master
     }
 
     data object RefreshToken : ApplicationException(message = "refresh token exception") {
@@ -76,15 +72,12 @@ sealed class ApplicationException(message: String) : Exception(message) {
         override val code: Code get() = Code.DATA_NOT_FOUND
     }
 
-<<<<<<< HEAD
     data object InvalidCreateUser : ApplicationException(message = "Error while creating user") {
         override val statusCode: HttpStatusCode get() = HttpStatusCode.OK
         override val code: Code get() = Code.DECLINE
-=======
     data object Unknown : ApplicationException(message = "Internal server error") {
         override val statusCode: HttpStatusCode get() = HttpStatusCode.InternalServerError
         override val code: Code get() = Code.SERVER_ERROR
->>>>>>> origin/master
     }
 }
 
