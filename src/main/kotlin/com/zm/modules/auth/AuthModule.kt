@@ -12,16 +12,10 @@ fun Route.authModule() {
 
     route("auth") {
 
-        post("register/admin") {
+        post("register/user") {
             receive<CreateUserBody> { createUserBody ->
                 val credentialsResponse = controller.createUser(createUserBody)
                 call.respond(successResult(credentialsResponse))
-            }
-        }
-
-        post("register/user") {
-            receive<CreateUserBody> { createUserBody ->
-                println(createUserBody)
             }
         }
 

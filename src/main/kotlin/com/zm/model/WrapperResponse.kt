@@ -1,6 +1,5 @@
 package com.zm.model
 
-import com.zm.statuspages.ApplicationException
 import com.zm.statuspages.Code
 import io.ktor.http.*
 import io.ktor.server.application.*

@@ -18,7 +18,22 @@ sealed class ApplicationException(message: String) : Exception(message) {
 
     data object UserWasAlreadyCreated : ApplicationException(message = "User was already created") {
         override val statusCode: HttpStatusCode get() = HttpStatusCode.OK
-        override val code: Code get() = Code.SUCCESS
+        override val code: Code get() = Code.DECLINE
+    }
+
+    data object InvalidEmail : ApplicationException(message = "Invalid email") {
+        override val statusCode: HttpStatusCode get() = HttpStatusCode.OK
+        override val code: Code get() = Code.DECLINE
+    }
+
+    data object InvalidPassword : ApplicationException(message = "Invalid password") {
+        override val statusCode: HttpStatusCode get() = HttpStatusCode.OK
+        override val code: Code get() = Code.DECLINE
+    }
+
+    data object IncorrectPassword : ApplicationException(message = "Incorrect password") {
+        override val statusCode: HttpStatusCode get() = HttpStatusCode.OK
+        override val code: Code get() = Code.DECLINE
     }
 
     data object RefreshToken : ApplicationException(message = "refresh token exception") {
@@ -29,6 +44,11 @@ sealed class ApplicationException(message: String) : Exception(message) {
     data object DataNotFound : ApplicationException(message = "Data not found") {
         override val statusCode: HttpStatusCode get() = HttpStatusCode.BadRequest
         override val code: Code get() = Code.DATA_NOT_FOUND
+    }
+
+    data object InvalidCreateUser : ApplicationException(message = "Error while creating user") {
+        override val statusCode: HttpStatusCode get() = HttpStatusCode.OK
+        override val code: Code get() = Code.DECLINE
     }
 }
 

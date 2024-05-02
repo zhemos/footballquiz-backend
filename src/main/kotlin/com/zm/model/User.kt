@@ -1,7 +1,6 @@
 package com.zm.model
 
 data class User(
-//    @field:SerializedName("id")
     val id: Int,
     val login: String,
     val password: String,
