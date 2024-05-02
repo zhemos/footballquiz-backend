@@ -13,6 +13,8 @@ import com.zm.db.injection.DaoInjection
 import com.zm.modules.injection.ModulesInjection
 import com.zm.plugins.*
 import com.zm.plugins.configureRouting
+import com.zm.util.DateManager
+import com.zm.util.DateManagerContract
 import com.zm.util.PasswordManager
 import com.zm.util.PasswordManagerContract
 import io.ktor.server.application.*
@@ -36,6 +38,7 @@ fun main() {
                         single<DatabaseProviderContract> { DatabaseProvider() }
                         single<TokenProvider> { config.jwt }
                         single<PasswordManagerContract> { PasswordManager }
+                        single<DateManagerContract> { DateManager }
                         single<JWTVerifier> { config.jwt.verifier }
                     },
                     ApiInjection.koinBeans,
@@ -50,7 +53,7 @@ fun main() {
 
 fun handleDefaultEnvironment(): String {
     println("Falling back to default environment 'dev'")
-    return "dev"
+    return "dev2"
 }
 
 fun extractConfig(environment: String, hoconConfig: HoconApplicationConfig): Config {
@@ -61,6 +64,9 @@ fun extractConfig(environment: String, hoconConfig: HoconApplicationConfig): Con
         port = Integer.parseInt(hoconEnvironment.property("port").getString()),
         databaseHost = hoconEnvironment.property("databaseHost").getString(),
         databasePort = hoconEnvironment.property("databasePort").getString(),
+        databaseName = hoconEnvironment.property("databaseName").getString(),
+        databaseLogin = hoconEnvironment.property("databaseLogin").getString(),
+        databasePassword = hoconEnvironment.property("databasePassword").getString(),
         jwt = JwtConfig(
             secret = jwtConfig.property("secret").getString(),
             issuer = jwtConfig.property("issuer").getString(),

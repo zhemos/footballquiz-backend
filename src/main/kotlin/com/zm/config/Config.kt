@@ -14,14 +14,11 @@ class Config(
     val port: Int,
     val databaseHost: String,
     val databasePort: String,
+    val databaseName: String,
+    val databaseLogin: String,
+    val databasePassword: String,
     val jwt: JwtConfig
-) {
-    companion object {
-        const val DATABASE_NAME: String = "footballquiz"
-        const val DATABASE_USER: String = "root"
-        const val DATABASE_PASSWORD: String = "root"
-    }
-}
+)
 
 class JwtConfig(
     val secret: String,

@@ -8,30 +8,40 @@ object Users : Table(), UserDao {
     val id = integer("id").autoIncrement()
     override val primaryKey = PrimaryKey(id)
     val login = varchar("login", 30)
-    val password = varchar("password", 100)
+    val password = varchar("password", 30)
     val email = varchar("email", 30)
-    private val nickname = varchar("nickname", 30)
-    private val role = varchar("role", 20)
-    private val country = varchar("country", 2)
-    private val dateCreated = long("dateCreated")
-    private val dateUpdated = long("dateUpdated")
+    val nickname = varchar("nickname", 30)
+    val role = varchar("role", 20)
+    val dateOfBirth = varchar("dateOfBirth", 30)
+    val country = varchar("country", 2)
+    val dateCreated = varchar("dateCreated", 30)
+    val dateUpdated = varchar("dateUpdated", 30)
 
     override fun insertUser(createUserBody: CreateUserBody): Int? {
-        return insert {
-            it[login] = createUserBody.login
-            it[email] = createUserBody.email
+        val a = insert {
+            it[login] = "root1"
+            it[password] = "root1"
+            it[email] = "email"
             it[nickname] = "nickname"
-            it[password] = createUserBody.password
-            it[role] = createUserBody.role ?: User.Role.User.value
-            it[country] = createUserBody.country
-            it[dateCreated] = System.currentTimeMillis()
-            it[dateUpdated] = System.currentTimeMillis()
-        }.getOrNull(id)
+            it[role] = "role"
+            it[dateOfBirth] = "dateOfBirth"
+            it[country] = "aa"
+            it[dateCreated] = "datecreated"
+            it[dateUpdated] = "dateupdated"
+        }
+        println("!!!")
+        val user = getUserById(a[id])
+        println(user)
+        println(a[id])
+        println(a[login])
+        println(a[role])
+        println(a[country])
+        return null
     }
 
     override fun getUserById(userId: Int): User? {
         return select {
-            id eq userId
+            (id eq userId)
         }.map {
             it.mapRowToUser()
         }.singleOrNull()
@@ -39,7 +49,7 @@ object Users : Table(), UserDao {
 
     override fun getUserByLogin(login: String): User? {
         return select {
-            (Users.login eq login) or (email eq login)
+            (Users.login eq login)
         }.map {
             it.mapRowToUser()
         }.singleOrNull()
@@ -58,7 +68,7 @@ fun ResultRow.mapRowToUser() = User(
     id = this[Users.id],
     login = this[Users.login],
     password = this[Users.password],
-    role = "test"
+    role = this[Users.role]
 )
 
 interface UserDao {

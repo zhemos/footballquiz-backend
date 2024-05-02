@@ -13,12 +13,8 @@ fun Application.configureStatusPages() {
         exception<ApplicationException.DataNotFound> { call, cause ->
             call.respond(cause.statusCode, cause.response)
         }
-        exception<UnknownError> { call, _ ->
-            call.respondText(
-                "Internal server error",
-                ContentType.Text.Plain,
-                status = HttpStatusCode.InternalServerError
-            )
+        exception<ApplicationException.Unknown> { call, cause ->
+            call.respond(cause.statusCode, cause.response)
         }
         exception<IllegalArgumentException> { call, _ ->
             call.respond(HttpStatusCode.BadRequest)

@@ -34,9 +34,9 @@ class DatabaseProvider : DatabaseProviderContract, KoinComponent {
     private fun hikari(mainConfig: Config): HikariDataSource {
         HikariConfig().run {
             driverClassName = "com.mysql.jdbc.Driver"
-            jdbcUrl = "jdbc:mysql://${mainConfig.databaseHost}:${mainConfig.databasePort}/${Config.DATABASE_NAME}"
-            username = Config.DATABASE_USER
-            password = Config.DATABASE_PASSWORD
+            jdbcUrl = "jdbc:mysql://${mainConfig.databaseHost}:${mainConfig.databasePort}/${mainConfig.databaseName}"
+            username = mainConfig.databaseLogin
+            password = mainConfig.databasePassword
             isAutoCommit = false
             transactionIsolation = "TRANSACTION_REPEATABLE_READ"
             validate()
