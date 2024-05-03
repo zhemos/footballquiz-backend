@@ -9,7 +9,7 @@ class UserControllerImpl : BaseController(), UserController {
 
     private val userApi by inject<UserApi>()
 
-    override suspend fun getUserById(id: Int): User? {
-        return userApi.getUserById(id)
+    override suspend fun getUserById(id: Int): User? = dbQuery {
+        return@dbQuery userApi.getUserById(id)
     }
 }

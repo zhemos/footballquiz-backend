@@ -48,7 +48,6 @@ class JwtConfig(
     }
 
     override fun verifyToken(token: String): Int? {
-        println("VERIFY: $token")
         return try {
             if (verifier.verify(token).claims["ati"] == null) {
                 throw ApplicationException.Generic("it isn't refresh token")
