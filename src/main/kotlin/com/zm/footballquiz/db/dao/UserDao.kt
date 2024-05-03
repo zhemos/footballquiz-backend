@@ -4,7 +4,7 @@ import com.zm.footballquiz.model.dto.CreateUserBody
 import com.zm.footballquiz.model.User
 import org.jetbrains.exposed.sql.*
 
-object Users : Table(), UserDao {
+object Users : BaseDao(), UserDao {
     val id = integer("id").autoIncrement()
     override val primaryKey = PrimaryKey(id)
     val login = varchar("login", 30)
@@ -13,8 +13,6 @@ object Users : Table(), UserDao {
     val email = varchar("email", 30)
     val nickname = varchar("nickname", 30)
     val country = varchar("country", 2)
-    private val dateCreated = long("dateCreated")
-    private val dateUpdated = long("dateUpdated")
 
     override fun insertUser(createUserBody: CreateUserBody): Int? {
         return insert {
@@ -22,7 +20,7 @@ object Users : Table(), UserDao {
             it[email] = createUserBody.email
             it[password] = createUserBody.password
             it[role] = createUserBody.role ?: User.Role.User.value
-            it[nickname] = "nickname"
+            it[nickname] = "nickname"//todo user#
             it[country] = createUserBody.country
             it[dateCreated] = System.currentTimeMillis()
             it[dateUpdated] = System.currentTimeMillis()

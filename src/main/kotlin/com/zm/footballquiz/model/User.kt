@@ -12,21 +12,17 @@ data class User(
 
     sealed interface Role {
         val value: String
-        val absoluteValue: String
 
         data object Admin : Role {
-            override val value: String get() = ""
-            override val absoluteValue: String get() = ""
+            override val value: String get() = "admin"
         }
 
         data object User : Role {
-            override val value: String get() = ""
-            override val absoluteValue: String get() = ""
+            override val value: String get() = "user"
         }
 
         data object Bot : Role {
-            override val value: String get() = ""
-            override val absoluteValue: String get() = ""
+            override val value: String get() = "bot"
         }
     }
 }
