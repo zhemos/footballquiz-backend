@@ -1,9 +1,9 @@
 package com.zm.footballquiz.modules.auth
 
-import com.zm.footballquiz.model.CreateUserBody
-import com.zm.footballquiz.model.CredentialsResponse
-import com.zm.footballquiz.model.LoginCredentials
-import com.zm.footballquiz.model.RefreshBody
+import com.zm.footballquiz.model.dto.CreateUserBody
+import com.zm.footballquiz.model.dto.CredentialsResponse
+import com.zm.footballquiz.model.dto.LoginCredentials
+import com.zm.footballquiz.model.dto.RefreshBody
 
 interface AuthController {
 

@@ -4,7 +4,7 @@ import com.auth0.jwt.JWT
 import com.auth0.jwt.JWTCreator
 import com.auth0.jwt.JWTVerifier
 import com.auth0.jwt.algorithms.Algorithm
-import com.zm.footballquiz.model.CredentialsResponse
+import com.zm.footballquiz.model.dto.CredentialsResponse
 import com.zm.footballquiz.model.User
 import com.zm.footballquiz.statuspages.ApplicationException
 import java.util.*

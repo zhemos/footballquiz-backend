@@ -1,9 +1,9 @@
 package com.zm.footballquiz.modules.user
 
+import com.zm.footballquiz.model.dto.UserResponse
+import com.zm.footballquiz.modules.checkAuthorize
 import com.zm.footballquiz.modules.successResult
 import io.ktor.server.application.*
-import io.ktor.server.auth.*
-import io.ktor.server.auth.jwt.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
 import org.koin.ktor.ext.inject
@@ -14,9 +14,8 @@ fun Route.userModule() {
 
     route("user") {
         get {
-            val principal = call.principal<JWTPrincipal>()
-            principal?.payload?.getClaim("id")?.asInt()?.let { userId ->
-                val user = controller.getUserById(userId)
+            checkAuthorize { userId ->
+                val user: UserResponse? = controller.getUserById(userId)?.toDto()
                 call.respond(successResult(user))
             }
         }

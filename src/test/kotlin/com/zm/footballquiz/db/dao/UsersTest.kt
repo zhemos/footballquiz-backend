@@ -1,13 +1,10 @@
 package com.zm.footballquiz.db.dao
 
-import com.zm.db.dao.Users.autoIncrement
-import com.zm.model.CreateUserBody
-import org.junit.Assert.*
+import com.zm.footballquiz.model.dto.CreateUserBody
+import org.jetbrains.exposed.sql.Table
+import org.jetbrains.exposed.sql.insert
 import org.junit.Test
 import org.junit.jupiter.api.TestInstance
-import kotlin.math.log
-import org.jetbrains.exposed.sql.*
-
 
 
 @TestInstance(TestInstance.Lifecycle.PER_CLASS)
@@ -21,8 +18,8 @@ class UsersTest : BaseDaoTest() {
                 login = "",
                 email = "",
                 password = "",
-                dateOfBirth = "",
-                country = ""
+                country = "",
+                role = null
             )
             val user = TestTable.insert("111")
             println(user)

@@ -1,6 +1,6 @@
 package com.zm.footballquiz
 
-import com.zm.plugins.configureRouting
+import com.zm.footballquiz.plugins.configureRouting
 import io.ktor.client.request.*
 import io.ktor.client.statement.*
 import io.ktor.http.*

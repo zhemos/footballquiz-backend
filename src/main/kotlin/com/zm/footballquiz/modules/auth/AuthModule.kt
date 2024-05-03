@@ -1,8 +1,8 @@
 package com.zm.footballquiz.modules.auth
 
-import com.zm.footballquiz.model.CreateUserBody
-import com.zm.footballquiz.model.LoginCredentials
-import com.zm.footballquiz.model.RefreshBody
+import com.zm.footballquiz.model.dto.CreateUserBody
+import com.zm.footballquiz.model.dto.LoginCredentials
+import com.zm.footballquiz.model.dto.RefreshBody
 import com.zm.footballquiz.modules.receive
 import com.zm.footballquiz.modules.successResult
 import io.ktor.server.application.*

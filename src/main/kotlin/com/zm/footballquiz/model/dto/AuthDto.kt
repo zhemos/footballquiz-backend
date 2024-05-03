@@ -1,4 +1,4 @@
-package com.zm.footballquiz.model
+package com.zm.footballquiz.model.dto
 
 data class CreateUserBody(
     val login: String,

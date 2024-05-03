@@ -1,7 +1,7 @@
 package com.zm.footballquiz.api.user
 
 import com.zm.footballquiz.db.dao.UserDao
-import com.zm.footballquiz.model.CreateUserBody
+import com.zm.footballquiz.model.dto.CreateUserBody
 import com.zm.footballquiz.model.User
 import com.zm.footballquiz.statuspages.ApplicationException
 import com.zm.footballquiz.util.PasswordManagerContract
@@ -17,10 +17,7 @@ object UserApiImpl : UserApi, KoinComponent {
         val encryptedUser = createUserBody.copy(
             password = passwordEncryption.encryptPassword(createUserBody.password)
         )
-        println("encryptedUser: $encryptedUser")
         val key = usersDao.insertUser(encryptedUser)
-        println("KEY: $key")
-//        val id = usersDao.insertUser(createUserBody)
         return key?.let {
             usersDao.getUserById(it)
         } ?: throw ApplicationException.Generic("invalid create user")

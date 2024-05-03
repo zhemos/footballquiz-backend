@@ -1,6 +1,6 @@
 package com.zm.footballquiz.api.user
 
-import com.zm.footballquiz.model.CreateUserBody
+import com.zm.footballquiz.model.dto.CreateUserBody
 import com.zm.footballquiz.model.User
 
 interface UserApi {
