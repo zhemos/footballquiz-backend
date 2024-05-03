@@ -3,6 +3,7 @@ package com.zm.footballquiz.db.dao
 import com.zm.footballquiz.model.dto.CreateUserBody
 import com.zm.footballquiz.model.User
 import org.jetbrains.exposed.sql.*
+import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 
 object Users : BaseDao(), UserDao {
     val id = integer("id").autoIncrement()
@@ -50,6 +51,10 @@ object Users : BaseDao(), UserDao {
             it.mapRowToUser()
         }.singleOrNull()
     }
+
+    override fun deleteUserById(id: Int) {
+        deleteWhere { Users.id eq id }
+    }
 }
 
 fun ResultRow.mapRowToUser() = User(
@@ -67,4 +72,5 @@ interface UserDao {
     fun getUserById(userId: Int): User?
     fun getUserByLogin(login: String): User?
     fun getUserByLoginOrEmail(login: String, email: String): User?
+    fun deleteUserById(id: Int)
 }

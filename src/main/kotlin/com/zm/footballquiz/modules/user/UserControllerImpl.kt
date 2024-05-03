@@ -12,4 +12,8 @@ class UserControllerImpl : BaseController(), UserController {
     override suspend fun getUserById(id: Int): User? = dbQuery {
         return@dbQuery userApi.getUserById(id)
     }
+
+    override suspend fun deleteUserById(id: Int) = dbQuery {
+        userApi.deleteUserById(id)
+    }
 }

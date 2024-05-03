@@ -5,4 +5,6 @@ import com.zm.footballquiz.model.User
 interface UserController {
 
     suspend fun getUserById(id: Int): User?
+
+    suspend fun deleteUserById(id: Int)
 }

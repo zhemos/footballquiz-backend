@@ -13,10 +13,18 @@ fun Route.userModule() {
     val controller by inject<UserController>()
 
     route("user") {
+
         get {
             checkAuthorize { userId ->
                 val user: UserResponse? = controller.getUserById(userId)?.toDto()
                 call.respond(successResult(user))
+            }
+        }
+
+        post("delete") {
+            checkAuthorize { userId ->
+                controller.deleteUserById(userId)
+                call.respond(successResult(null))
             }
         }
     }
