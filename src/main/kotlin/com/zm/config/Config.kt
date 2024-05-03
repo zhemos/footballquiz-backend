@@ -50,14 +50,12 @@ class JwtConfig(
     override fun verifyToken(token: String): Int? {
         println("VERIFY: $token")
         return try {
-            println("ATI: ${verifier.verify(token).claims["ati"]}")
-            println("ID: ${verifier.verify(token).claims["id"]}")
-//            verifier.verify(token).claims["ati"]?.let {
-//                return null
-//            }
+            if (verifier.verify(token).claims["ati"] == null) {
+                throw ApplicationException.Generic("it isn't refresh token")
+            }
             verifier.verify(token).claims["id"]?.asInt()
         } catch (e: Exception) {
-            println("catch refresh exception")
+            println("catch refresh exception ${e.message}")
             throw ApplicationException.Generic("refresh token")
         }
     }

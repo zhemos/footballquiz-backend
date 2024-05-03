@@ -45,10 +45,10 @@ class AuthControllerImpl : BaseController(), AuthController {
 
     override suspend fun refreshToken(refreshBody: RefreshBody): CredentialsResponse {
         tokenProvider.verifyToken(refreshBody.refreshToken)?.let { userId ->
-            println("userID: $userId")
-            userApi.getUserById(userId)?.let { user ->
-                return tokenProvider.createTokens(user)
-            } ?: throw ApplicationException.DataNotFound
+            val user = dbQuery {
+                userApi.getUserById(userId) ?: throw ApplicationException.DataNotFound
+            }
+            return tokenProvider.createTokens(user)
         } ?: throw ApplicationException.Generic("refresh token")
     }
 }

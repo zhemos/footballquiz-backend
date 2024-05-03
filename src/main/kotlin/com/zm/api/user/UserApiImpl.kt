@@ -27,7 +27,7 @@ object UserApiImpl : UserApi, KoinComponent {
     }
 
     override fun getUserById(id: Int): User? {
-        return null
+        return usersDao.getUserById(id)
     }
 
     override fun getUserByLogin(login: String): User? {
