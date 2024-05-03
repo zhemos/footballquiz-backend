@@ -3,7 +3,6 @@ package com.zm.db
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import com.zm.config.Config
-import com.zm.db.dao.Testing
 import com.zm.db.dao.Users
 import kotlinx.coroutines.newFixedThreadPoolContext
 import kotlinx.coroutines.withContext
@@ -27,7 +26,6 @@ class DatabaseProvider : DatabaseProviderContract, KoinComponent {
         Database.connect(hikari(config))
         transaction {
             create(Users)
-            create(Testing)
         }
     }
 

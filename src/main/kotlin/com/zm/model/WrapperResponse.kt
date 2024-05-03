@@ -1,6 +1,6 @@
 package com.zm.model
 
-import com.zm.statuspages.Code
+import com.zm.statuspages.ApplicationException
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.plugins.*
@@ -30,7 +30,7 @@ suspend inline fun <reified T : Any> PipelineContext<Unit, ApplicationCall>.rece
 }
 
 fun <T> successResult(data: T): WrapperResponse<T> = WrapperResponse(
-    code = Code.SUCCESS.value,
+    code = ApplicationException.Code.SUCCESS.value,
     data = data,
     error = null
 )

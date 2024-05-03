@@ -4,7 +4,7 @@ import com.auth0.jwt.interfaces.JWTVerifier
 import com.zm.api.user.UserApi
 import com.zm.config.JwtConfig
 import com.zm.model.WrapperResponse
-import com.zm.statuspages.Code
+import com.zm.statuspages.ApplicationException
 import io.ktor.http.*
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
@@ -35,7 +35,7 @@ fun Application.configureAuthentication(
                 call.respond(
                     HttpStatusCode.Unauthorized,
                     WrapperResponse(
-                        code = Code.UNAUTHORIZED.value,
+                        code = ApplicationException.Code.UNAUTHORIZED.value,
                         data = null,
                         error = "Token is not valid or has expired"
                     )

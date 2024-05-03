@@ -53,7 +53,7 @@ fun main() {
 
 fun handleDefaultEnvironment(): String {
     println("Falling back to default environment 'dev'")
-    return "dev2"
+    return "dev"
 }
 
 fun extractConfig(environment: String, hoconConfig: HoconApplicationConfig): Config {

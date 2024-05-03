@@ -58,7 +58,7 @@ class JwtConfig(
             verifier.verify(token).claims["id"]?.asInt()
         } catch (e: Exception) {
             println("catch refresh exception")
-            throw ApplicationException.RefreshToken
+            throw ApplicationException.Generic("refresh token")
         }
     }
 
