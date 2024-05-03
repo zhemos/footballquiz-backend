@@ -19,7 +19,6 @@ class UsersTest : BaseDaoTest() {
                 email = "",
                 password = "",
                 country = "",
-                role = null
             )
             val user = TestTable.insert("111")
             println(user)
