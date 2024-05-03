@@ -20,7 +20,7 @@ object Users : BaseDao(), UserDao {
             it[login] = createUserBody.login
             it[email] = createUserBody.email
             it[password] = createUserBody.password
-            it[role] = createUserBody.role ?: User.Role.User.value
+            it[role] = User.Role.User.value
             it[nickname] = "nickname"//todo user#
             it[country] = createUserBody.country
             it[dateCreated] = System.currentTimeMillis()

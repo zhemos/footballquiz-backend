@@ -1,5 +1,8 @@
 package com.zm.footballquiz.model
 
+import io.ktor.server.application.*
+import io.ktor.server.auth.*
+
 data class User(
     val id: Int,
     val login: String,
@@ -12,6 +15,10 @@ data class User(
 
     sealed interface Role {
         val value: String
+
+        data object SuperAdmin : Role {
+            override val value: String get() = "super"
+        }
 
         data object Admin : Role {
             override val value: String get() = "admin"

@@ -5,7 +5,6 @@ data class CreateUserBody(
     val email: String,
     val password: String,
     val country: String,
-    val role: String?,
 )
 
 data class LoginCredentials(

@@ -16,7 +16,7 @@ data class WrapperResponse<T>(
     val error: String?
 )
 
-inline fun PipelineContext<Unit, ApplicationCall>.checkAuthorize(
+inline fun PipelineContext<Unit, ApplicationCall>.fetchUser(
     foundUser: (userId: Int) -> Unit
 ) {
     val principal = call.principal<JWTPrincipal>()
