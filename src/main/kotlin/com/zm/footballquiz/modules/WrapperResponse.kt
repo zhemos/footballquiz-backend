@@ -1,5 +1,6 @@
 package com.zm.footballquiz.modules
 
+import com.zm.footballquiz.model.User
 import com.zm.footballquiz.statuspages.ApplicationException
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -15,6 +16,30 @@ data class WrapperResponse<T>(
     val data: T?,
     val error: String?
 )
+
+inline fun PipelineContext<Unit, ApplicationCall>.checkAdminPermission(
+    body: () -> Unit
+) {
+    val principal = call.principal<JWTPrincipal>()
+    principal?.payload?.getClaim("role")?.asString()?.let { role ->
+        if (User.Role.SuperAdmin.value != role && User.Role.Admin.value != role) {
+            throw ApplicationException.Generic("access denied")
+        }
+    }
+    body()
+}
+
+inline fun PipelineContext<Unit, ApplicationCall>.checkSuperAdminPermission(
+    body: () -> Unit
+) {
+    val principal = call.principal<JWTPrincipal>()
+    principal?.payload?.getClaim("role")?.asString()?.let { role ->
+        if (User.Role.SuperAdmin.value != role) {
+            throw ApplicationException.Generic("access denied")
+        }
+    }
+    body()
+}
 
 inline fun PipelineContext<Unit, ApplicationCall>.fetchUser(
     foundUser: (userId: Int) -> Unit

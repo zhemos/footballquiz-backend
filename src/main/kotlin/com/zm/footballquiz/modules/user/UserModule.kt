@@ -1,10 +1,11 @@
 package com.zm.footballquiz.modules.user
 
+import com.zm.footballquiz.model.User
 import com.zm.footballquiz.model.dto.CreateUserBody
 import com.zm.footballquiz.model.dto.UserResponse
-import com.zm.footballquiz.modules.fetchUser
-import com.zm.footballquiz.modules.receive
-import com.zm.footballquiz.modules.successResult
+import com.zm.footballquiz.model.dto.UserUpdateBody
+import com.zm.footballquiz.modules.*
+import com.zm.footballquiz.statuspages.ApplicationException
 import io.ktor.server.application.*
 import io.ktor.server.response.*
 import io.ktor.server.routing.*
@@ -16,40 +17,92 @@ fun Route.userModule() {
 
     route("user") {
 
-        get {
-            fetchUser { userId ->
-                val user: UserResponse? = controller.getUserById(userId)?.toDto()
-                call.respond(successResult(user))
-            }
-        }
-
         post("create") {
-            receive<CreateUserBody> { createUserBody ->
-                controller.createUser(createUserBody)
-                call.respond(successResult(null))
+            checkAdminPermission {
+                receive<CreateUserBody> { createUserBody ->
+                    controller.createUser(
+                        createUserBody = createUserBody,
+                        userRole = User.Role.User,
+                    )
+                    call.respond(successResult(null))
+                }
             }
         }
 
-        post("delete") {
+        post("create/admin") {
+            checkSuperAdminPermission {
+                receive<CreateUserBody> { createUserBody ->
+                    controller.createUser(
+                        createUserBody = createUserBody,
+                        userRole = User.Role.Admin,
+                    )
+                    call.respond(successResult(null))
+                }
+            }
+        }
+
+        post("remove") {
             fetchUser { userId ->
                 controller.deleteUserById(userId)
                 call.respond(successResult(null))
             }
         }
 
-        get("{test}") {
-            call.respond(successResult(call.parameters["test"]))
+        post("remove/{id}") {
+            checkAdminPermission {
+                val userId = call.parameters["id"]?.toInt() ?: throw ApplicationException.BadRequest()
+                controller.deleteUserById(userId)
+                call.respond(successResult(null))
+            }
         }
-        
-        //create users
-        //create admins
-        //delete users by id
-        //delete admins by id
-        //get all users except super admin
-        //get all users except super admin and admins
-        //update users
-        //update users by id
-        //update admin
-        //update admin by id
+
+        post("remove/admin/{id}") {
+            checkSuperAdminPermission {
+                val userId = call.parameters["id"]?.toInt() ?: throw ApplicationException.BadRequest()
+                controller.deleteAdminById(userId)
+                call.respond(successResult(null))
+            }
+        }
+
+        get("") {
+            fetchUser { userId ->
+                val user: UserResponse? = controller.getUserById(userId)
+                call.respond(successResult(user))
+            }
+        }
+
+        get("all") {
+            checkAdminPermission {
+                fetchUser { userId ->
+                    val users = controller.getUsers(userId)
+                    call.respond(successResult(users))
+                }
+            }
+        }
+
+        post("update") {
+            fetchUser { userId ->
+                receive<UserUpdateBody> { userUpdateBody ->
+                    val user = controller.updateUser(
+                        userId = userId,
+                        userUpdateBody = userUpdateBody
+                    ) ?: throw ApplicationException.DataNotFound
+                    call.respond(successResult(user))
+                }
+            }
+        }
+
+        post("update/{id}") {
+            checkSuperAdminPermission {
+                val userId = call.parameters["id"]?.toInt() ?: throw ApplicationException.BadRequest()
+                receive<UserUpdateBody> { userUpdateBody ->
+                    val user = controller.updateUser(
+                        userId = userId,
+                        userUpdateBody = userUpdateBody
+                    ) ?: throw ApplicationException.DataNotFound
+                    call.respond(successResult(user))
+                }
+            }
+        }
     }
 }

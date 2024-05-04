@@ -2,9 +2,10 @@ package com.zm.footballquiz.modules.auth
 
 import com.zm.footballquiz.api.user.UserApi
 import com.zm.footballquiz.config.TokenProvider
+import com.zm.footballquiz.model.User
 import com.zm.footballquiz.model.dto.CreateUserBody
 import com.zm.footballquiz.model.dto.CredentialsResponse
-import com.zm.footballquiz.model.dto.LoginCredentials
+import com.zm.footballquiz.model.dto.LoginCredentialsBody
 import com.zm.footballquiz.model.dto.RefreshBody
 import com.zm.footballquiz.modules.BaseController
 import com.zm.footballquiz.statuspages.ApplicationException
@@ -19,7 +20,10 @@ class AuthControllerImpl : BaseController(), AuthController {
     private val passwordManager by inject<PasswordManagerContract>()
     private val tokenProvider by inject<TokenProvider>()
 
-    override suspend fun createUser(createUserBody: CreateUserBody): CredentialsResponse = with(createUserBody) {
+    override suspend fun createUser(
+        createUserBody: CreateUserBody,
+        userRole: User.Role
+    ): CredentialsResponse = with(createUserBody) {
         if (email.isEmailValid().not()) {
             throw ApplicationException.Generic("invalid email")
         }
@@ -30,12 +34,12 @@ class AuthControllerImpl : BaseController(), AuthController {
             userApi.getUserByLoginOrEmail(login, email)?.let {
                 throw ApplicationException.Generic("user was already created")
             }
-            userApi.createUser(this)
+            userApi.createUser(this, userRole)
         }
         return tokenProvider.createTokens(user)
     }
 
-    override suspend fun login(credentials: LoginCredentials): CredentialsResponse = dbQuery {
+    override suspend fun login(credentials: LoginCredentialsBody): CredentialsResponse = dbQuery {
         userApi.getUserByLogin(credentials.login)?.let { user ->
             if (passwordManager.validatePassword(credentials.password, user.password)) {
                 return@dbQuery tokenProvider.createTokens(user)

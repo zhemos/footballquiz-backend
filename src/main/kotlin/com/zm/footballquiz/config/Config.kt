@@ -40,6 +40,7 @@ class JwtConfig(
             .withIssuer(issuer)
             .withClaim("id", user.id)
             .withClaim("login", user.login)
+            .withClaim("role", user.role)
         return CredentialsResponse(
             accessToken = createAccessToken(jwtBuilder),
             refreshToken = createRefreshToken(jwtBuilder),

@@ -1,5 +1,10 @@
 package com.zm.footballquiz.model.dto
 
+data class UserUpdateBody(
+    val nickname: String?,
+    val country: String?,
+)
+
 data class UserResponse(
     val id: Int,
     val login: String,

@@ -7,7 +7,7 @@ data class CreateUserBody(
     val country: String,
 )
 
-data class LoginCredentials(
+data class LoginCredentialsBody(
     val login: String,
     val password: String,
 )

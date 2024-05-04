@@ -1,8 +1,5 @@
 package com.zm.footballquiz.model
 
-import io.ktor.server.application.*
-import io.ktor.server.auth.*
-
 data class User(
     val id: Int,
     val login: String,

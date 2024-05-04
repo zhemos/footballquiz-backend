@@ -2,6 +2,7 @@ package com.zm.footballquiz.db.dao
 
 import com.zm.footballquiz.model.dto.CreateUserBody
 import com.zm.footballquiz.model.User
+import com.zm.footballquiz.model.dto.UserUpdateBody
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 
@@ -15,12 +16,12 @@ object Users : BaseDao(), UserDao {
     val nickname = varchar("nickname", 30)
     val country = varchar("country", 2)
 
-    override fun insertUser(createUserBody: CreateUserBody): Int? {
+    override fun insertUser(createUserBody: CreateUserBody, userRole: User.Role): Int? {
         return insert {
             it[login] = createUserBody.login
             it[email] = createUserBody.email
             it[password] = createUserBody.password
-            it[role] = User.Role.User.value
+            it[role] = userRole.value
             it[nickname] = "nickname"//todo user#
             it[country] = createUserBody.country
             it[dateCreated] = System.currentTimeMillis()
@@ -52,8 +53,26 @@ object Users : BaseDao(), UserDao {
         }.singleOrNull()
     }
 
-    override fun deleteUserById(id: Int) {
-        deleteWhere { Users.id eq id }
+    override fun deleteUserById(userId: Int) {
+        deleteWhere { id eq userId }
+    }
+
+    override fun getUsers(): List<User> {
+        return selectAll().map {
+            it.mapRowToUser()
+        }
+    }
+
+    override fun updateUser(userId: Int, userUpdateBody: UserUpdateBody): User? {
+        update({ id eq userId }) { statement ->
+            userUpdateBody.nickname?.let {
+                statement[nickname] = it
+            }
+            userUpdateBody.country?.let {
+                statement[country] = it
+            }
+        }
+        return getUserById(userId)
     }
 }
 
@@ -68,9 +87,11 @@ fun ResultRow.mapRowToUser() = User(
 )
 
 interface UserDao {
-    fun insertUser(createUserBody: CreateUserBody): Int?
+    fun insertUser(createUserBody: CreateUserBody, userRole: User.Role): Int?
     fun getUserById(userId: Int): User?
     fun getUserByLogin(login: String): User?
     fun getUserByLoginOrEmail(login: String, email: String): User?
-    fun deleteUserById(id: Int)
+    fun deleteUserById(userId: Int)
+    fun getUsers(): List<User>
+    fun updateUser(userId: Int, userUpdateBody: UserUpdateBody): User?
 }
