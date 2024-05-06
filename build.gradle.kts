@@ -19,11 +19,11 @@ plugins {
     id("org.jetbrains.kotlin.plugin.serialization") version "1.9.22"
 }
 
-group = "com.zm"
+group = "com.zm.footballquiz"
 version = "0.0.1"
 
 application {
-    mainClass.set("com.zm.ApplicationKt")
+    mainClass.set("com.zm.footballquiz.ApplicationKt")
 
     val isDevelopment: Boolean = project.ext.has("development")
     applicationDefaultJvmArgs = listOf("-Dio.ktor.development=$isDevelopment")

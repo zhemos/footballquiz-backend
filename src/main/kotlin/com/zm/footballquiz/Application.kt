@@ -25,8 +25,8 @@ import org.koin.ktor.ext.inject
 import org.koin.ktor.plugin.Koin
 
 fun main() {
-    val environment = System.getenv()["ENVIRONMENT"] ?: com.zm.footballquiz.handleDefaultEnvironment()
-    val config = com.zm.footballquiz.extractConfig(environment, HoconApplicationConfig(ConfigFactory.load()))
+    val environment = System.getenv()["ENVIRONMENT"] ?: handleDefaultEnvironment()
+    val config = extractConfig(environment, HoconApplicationConfig(ConfigFactory.load()))
     embeddedServer(Netty, host = config.host, port = config.port) {
         println("Starting instance in ${config.host}:${config.port}")
         module {
@@ -51,8 +51,8 @@ fun main() {
 }
 
 fun handleDefaultEnvironment(): String {
-    println("Falling back to default environment 'dev'")
-    return "dev"
+    println("Falling back to default environment 'dev2'")
+    return "dev2"
 }
 
 fun extractConfig(environment: String, hoconConfig: HoconApplicationConfig): Config {
@@ -83,6 +83,18 @@ fun Application.initModules(jwtConfig: JwtConfig) {
     configureAuthentication(userApi, jwtConfig, jwtVerifier)
     configureStatusPages()
     configureMonitoring()
+    configureSerialization()
+    configureRouting()
+}
+
+fun Application.module() {
+    val environment = System.getenv()["ENVIRONMENT"] ?: handleDefaultEnvironment()
+    val config = extractConfig(environment, HoconApplicationConfig(ConfigFactory.load()))
+    val userApi by inject<UserApi>()
+    val databaseProvider by inject<DatabaseProviderContract>()
+    val jwtVerifier by inject<JWTVerifier>()
+    databaseProvider.init()
+    configureAuthentication(userApi, config.jwt, jwtVerifier)
     configureSerialization()
     configureRouting()
 }
