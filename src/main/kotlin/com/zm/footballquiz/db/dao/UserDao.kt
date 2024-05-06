@@ -1,12 +1,14 @@
 package com.zm.footballquiz.db.dao
 
+import com.zm.footballquiz.model.SingleModeStatistics
 import com.zm.footballquiz.model.dto.CreateUserBody
 import com.zm.footballquiz.model.User
 import com.zm.footballquiz.model.dto.UserUpdateBody
+import com.zm.footballquiz.statuspages.ApplicationException
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 
-object Users : BaseDao(), UserDao {
+object TableUsers : BaseDao("users"), UserDao {
     val id = integer("id").autoIncrement()
     override val primaryKey = PrimaryKey(id)
     val login = varchar("login", 30)
@@ -15,8 +17,10 @@ object Users : BaseDao(), UserDao {
     val email = varchar("email", 30)
     val nickname = varchar("nickname", 30)
     val country = varchar("country", 2)
+    val singleModeStatisticsId = reference("singleModeStatisticsId", TableSingleModeStatistics.id)
 
     override fun insertUser(createUserBody: CreateUserBody, userRole: User.Role): Int? {
+        val singleModeId = TableSingleModeStatistics.insertStatistics() ?: return null
         return insert {
             it[login] = createUserBody.login
             it[email] = createUserBody.email
@@ -24,6 +28,7 @@ object Users : BaseDao(), UserDao {
             it[role] = userRole.value
             it[nickname] = "nickname"//todo user#
             it[country] = createUserBody.country
+            it[singleModeStatisticsId] = singleModeId
             it[dateCreated] = System.currentTimeMillis()
             it[dateUpdated] = System.currentTimeMillis()
         }.getOrNull(id)
@@ -39,7 +44,7 @@ object Users : BaseDao(), UserDao {
 
     override fun getUserByLogin(login: String): User? {
         return select {
-            (Users.login eq login) or (email eq login)
+            (TableUsers.login eq login) or (email eq login)
         }.map {
             it.mapRowToUser()
         }.singleOrNull()
@@ -47,13 +52,15 @@ object Users : BaseDao(), UserDao {
 
     override fun getUserByLoginOrEmail(login: String, email: String): User? {
         return select {
-            (Users.login eq login) or (Users.email eq email)
+            (TableUsers.login eq login) or (TableUsers.email eq email)
         }.map {
             it.mapRowToUser()
         }.singleOrNull()
     }
 
     override fun deleteUserById(userId: Int) {
+        val user = getUserById(userId) ?: throw ApplicationException.DataNotFound
+        //TableSingleModeStatistics.deleteStatisticsById(user.id)
         deleteWhere { id eq userId }
     }
 
@@ -76,15 +83,20 @@ object Users : BaseDao(), UserDao {
     }
 }
 
-fun ResultRow.mapRowToUser() = User(
-    id = this[Users.id],
-    login = this[Users.login],
-    email = this[Users.email],
-    password = this[Users.password],
-    role = this[Users.role],
-    nickname = this[Users.nickname],
-    country = this[Users.country],
-)
+fun ResultRow.mapRowToUser(): User {
+    //todo
+    val a = TableSingleModeStatistics.getStatisticsById(this[TableUsers.singleModeStatisticsId])
+    return User(
+        id = this[TableUsers.id],
+        login = this[TableUsers.login],
+        email = this[TableUsers.email],
+        password = this[TableUsers.password],
+        role = this[TableUsers.role],
+        nickname = this[TableUsers.nickname],
+        country = this[TableUsers.country],
+        singleModeStatistics = SingleModeStatistics(1, 1)
+    )
+}
 
 interface UserDao {
     fun insertUser(createUserBody: CreateUserBody, userRole: User.Role): Int?

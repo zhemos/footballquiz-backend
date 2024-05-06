@@ -1,10 +1,12 @@
-package com.zm.footballquiz.controllers.instrumentation
+package com.zm.footballquiz.instrumentation
 
+import com.zm.footballquiz.instrumentation.StatisticsInstrumentation.givenSingleModeStatistics
 import com.zm.footballquiz.model.User
 
-object UserModuleInstrumentation {
+object UserInstrumentation {
 
     fun givenUser(id: Int = 123): User {
+        val singleModeStatistics = givenSingleModeStatistics()
         return User(
             id = id,
             login = "login",
@@ -13,6 +15,7 @@ object UserModuleInstrumentation {
             role = "user",
             nickname = "",
             country = "by",
+            singleModeStatistics = singleModeStatistics,
         )
     }
 }

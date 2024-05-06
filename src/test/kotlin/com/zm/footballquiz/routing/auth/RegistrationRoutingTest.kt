@@ -1,13 +1,13 @@
 package com.zm.footballquiz.routing.auth
 
 import com.google.gson.reflect.TypeToken
-import com.zm.footballquiz.controllers.instrumentation.AuthControllerInstrumentation.givenValidCreateUserBody
+import com.zm.footballquiz.instrumentation.AuthInstrumentation.givenCredentialsResponse
+import com.zm.footballquiz.instrumentation.AuthInstrumentation.givenValidCreateUserBody
 import com.zm.footballquiz.model.dto.CredentialsResponse
 import com.zm.footballquiz.modules.WrapperResponse
 import com.zm.footballquiz.modules.auth.AuthController
 import com.zm.footballquiz.modules.auth.authModule
 import com.zm.footballquiz.routing.BaseRoutingTest
-import com.zm.footballquiz.routing.instrumentation.AuthControllerInstrumentation.givenCredentialsResponse
 import com.zm.footballquiz.statuspages.ApplicationException
 import io.ktor.http.*
 import io.ktor.server.application.*

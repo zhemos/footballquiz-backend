@@ -3,13 +3,12 @@ package com.zm.footballquiz.controllers.auth
 import com.zm.footballquiz.api.user.UserApi
 import com.zm.footballquiz.config.TokenProvider
 import com.zm.footballquiz.controllers.BaseControllerTest
-import com.zm.footballquiz.controllers.instrumentation.AuthControllerInstrumentation.givenValidCreateUserBody
-import com.zm.footballquiz.controllers.instrumentation.UserModuleInstrumentation.givenUser
+import com.zm.footballquiz.instrumentation.AuthInstrumentation.givenCredentialsResponse
+import com.zm.footballquiz.instrumentation.AuthInstrumentation.givenValidCreateUserBody
+import com.zm.footballquiz.instrumentation.UserInstrumentation.givenUser
 import com.zm.footballquiz.model.User
-import com.zm.footballquiz.model.dto.CredentialsResponse
 import com.zm.footballquiz.modules.auth.AuthController
 import com.zm.footballquiz.modules.auth.AuthControllerImpl
-import com.zm.footballquiz.routing.instrumentation.AuthControllerInstrumentation.givenCredentialsResponse
 import com.zm.footballquiz.statuspages.ApplicationException
 import io.mockk.clearMocks
 import io.mockk.coEvery

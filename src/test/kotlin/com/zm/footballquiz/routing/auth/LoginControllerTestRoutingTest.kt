@@ -1,14 +1,14 @@
 package com.zm.footballquiz.routing.auth
 
 import com.google.gson.reflect.TypeToken
-import com.zm.footballquiz.controllers.instrumentation.AuthControllerInstrumentation.givenValidCreateUserBody
+import com.zm.footballquiz.instrumentation.AuthInstrumentation
+import com.zm.footballquiz.instrumentation.AuthInstrumentation.givenLoginCredentialsBody
+import com.zm.footballquiz.instrumentation.AuthInstrumentation.givenValidCreateUserBody
 import com.zm.footballquiz.model.dto.CredentialsResponse
 import com.zm.footballquiz.modules.WrapperResponse
 import com.zm.footballquiz.modules.auth.AuthController
 import com.zm.footballquiz.modules.auth.authModule
 import com.zm.footballquiz.routing.BaseRoutingTest
-import com.zm.footballquiz.routing.instrumentation.AuthControllerInstrumentation
-import com.zm.footballquiz.routing.instrumentation.AuthControllerInstrumentation.givenLoginCredentialsBody
 import com.zm.footballquiz.statuspages.ApplicationException
 import io.ktor.http.*
 import io.ktor.server.application.*
@@ -48,7 +48,7 @@ class LoginControllerTestRoutingTest : BaseRoutingTest() {
 
     @Test
     fun `when login is success, we return response credentials`() = withBaseTestApplication {
-        val credentialsResponse = AuthControllerInstrumentation.givenCredentialsResponse()
+        val credentialsResponse = AuthInstrumentation.givenCredentialsResponse()
         coEvery { authController.login(any()) } returns credentialsResponse
 
         val body = toJsonBody(givenLoginCredentialsBody())

@@ -1,9 +1,9 @@
 package com.zm.footballquiz.api.user
 
 import com.zm.footballquiz.api.BaseApiTest
-import com.zm.footballquiz.controllers.instrumentation.AuthControllerInstrumentation.givenValidCreateUserBody
-import com.zm.footballquiz.controllers.instrumentation.UserModuleInstrumentation.givenUser
 import com.zm.footballquiz.db.dao.UserDao
+import com.zm.footballquiz.instrumentation.AuthInstrumentation.givenValidCreateUserBody
+import com.zm.footballquiz.instrumentation.UserInstrumentation.givenUser
 import com.zm.footballquiz.model.User
 import com.zm.footballquiz.statuspages.ApplicationException
 import com.zm.footballquiz.util.PasswordManagerContract
