@@ -1,7 +1,7 @@
 package com.zm.footballquiz.api.user
 
 import com.zm.footballquiz.api.BaseApiTest
-import com.zm.footballquiz.controllers.instrumentation.RegistrationControllerInstrumentation.givenValidCreateUserBody
+import com.zm.footballquiz.controllers.instrumentation.AuthControllerInstrumentation.givenValidCreateUserBody
 import com.zm.footballquiz.controllers.instrumentation.UserModuleInstrumentation.givenUser
 import com.zm.footballquiz.db.dao.UserDao
 import com.zm.footballquiz.model.User

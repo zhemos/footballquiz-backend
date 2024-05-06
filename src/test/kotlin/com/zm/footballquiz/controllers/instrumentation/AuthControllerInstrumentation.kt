@@ -2,7 +2,7 @@ package com.zm.footballquiz.controllers.instrumentation
 
 import com.zm.footballquiz.model.dto.CreateUserBody
 
-object RegistrationControllerInstrumentation {
+object AuthControllerInstrumentation {
 
     fun givenValidCreateUserBody() = CreateUserBody(
         login = "login",

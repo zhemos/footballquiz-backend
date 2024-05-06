@@ -1,6 +1,6 @@
 package com.zm.footballquiz.dao
 
-import com.zm.footballquiz.controllers.instrumentation.RegistrationControllerInstrumentation.givenValidCreateUserBody
+import com.zm.footballquiz.controllers.instrumentation.AuthControllerInstrumentation.givenValidCreateUserBody
 import com.zm.footballquiz.db.dao.Users
 import com.zm.footballquiz.model.User
 import com.zm.footballquiz.model.dto.CreateUserBody
