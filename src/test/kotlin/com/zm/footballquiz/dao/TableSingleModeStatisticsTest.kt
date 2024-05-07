@@ -30,4 +30,11 @@ class TableSingleModeStatisticsTest : BaseDaoTest() {
         val actual = TableSingleModeStatistics.updateStatistics(id, statisticsBody)
         assertEquals(statistics, actual)
     }
+
+    @Test
+    fun `delete statistics`() = withTables(TableSingleModeStatistics) {
+        val id = TableSingleModeStatistics.insertStatistics() ?: throw IllegalStateException("id cannot be null")
+        val deleteId = TableSingleModeStatistics.deleteStatisticsById(id)
+        assertEquals(id, deleteId)
+    }
 }

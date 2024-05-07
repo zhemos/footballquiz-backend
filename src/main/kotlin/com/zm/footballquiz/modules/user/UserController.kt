@@ -9,9 +9,9 @@ interface UserController {
 
     suspend fun createUser(createUserBody: CreateUserBody, userRole: User.Role)
 
-    suspend fun deleteUserById(userId: Int)
+    suspend fun deleteUserById(userId: Int): Int
 
-    suspend fun deleteAdminById(userId: Int)
+    suspend fun deleteAdminById(userId: Int): Int
 
     suspend fun getUsers(userId: Int): List<UserResponse>
 

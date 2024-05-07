@@ -16,7 +16,7 @@ interface UserApi {
 
     fun getUserByLoginOrEmail(login: String, email: String): User?
 
-    fun deleteUserById(userId: Int)
+    fun deleteUserById(userId: Int): Int
 
     fun updateUser(userId: Int, userUpdateBody: UserUpdateBody): User?
 }

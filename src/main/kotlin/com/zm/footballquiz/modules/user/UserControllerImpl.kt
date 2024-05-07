@@ -33,20 +33,20 @@ class UserControllerImpl : BaseController(), UserController {
         }
     }
 
-    override suspend fun deleteUserById(userId: Int) = dbQuery {
+    override suspend fun deleteUserById(userId: Int): Int = dbQuery {
         val user = userApi.getUserById(userId) ?: throw ApplicationException.DataNotFound
         if (user.role != User.Role.User.value) {
             throw ApplicationException.Generic("access denied")
         }
-        userApi.deleteUserById(userId)
+        return@dbQuery userApi.deleteUserById(userId)
     }
 
-    override suspend fun deleteAdminById(userId: Int) = dbQuery {
+    override suspend fun deleteAdminById(userId: Int): Int = dbQuery {
         val user = userApi.getUserById(userId) ?: throw ApplicationException.DataNotFound
         if (user.role != User.Role.Admin.value) {
             throw ApplicationException.Generic("access denied")
         }
-        userApi.deleteUserById(userId)
+        return@dbQuery userApi.deleteUserById(userId)
     }
 
     override suspend fun getUsers(userId: Int): List<UserResponse> = dbQuery {

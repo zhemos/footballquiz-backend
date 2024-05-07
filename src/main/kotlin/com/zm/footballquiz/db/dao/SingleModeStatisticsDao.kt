@@ -42,8 +42,8 @@ object TableSingleModeStatistics : BaseDao("singleModeStatistics"), SingleModeSt
         return getStatisticsById(id)
     }
 
-    override fun deleteStatisticsById(id: Int) {
-        deleteWhere { TableSingleModeStatistics.id eq id }
+    override fun deleteStatisticsById(id: Int): Int {
+        return deleteWhere { TableSingleModeStatistics.id eq id }
     }
 }
 
@@ -57,5 +57,5 @@ interface SingleModeStatisticsDao {
     fun getStatisticsById(id: Int): SingleModeStatistics?
     fun getStatistics(): List<SingleModeStatistics>
     fun updateStatistics(id: Int, singleModeStatisticsBody: SingleModeStatisticsBody): SingleModeStatistics?
-    fun deleteStatisticsById(id: Int)
+    fun deleteStatisticsById(id: Int): Int
 }

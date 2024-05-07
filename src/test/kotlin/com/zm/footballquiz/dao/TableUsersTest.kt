@@ -19,8 +19,8 @@ class TableUsersTest : BaseDaoTest() {
         val createUserBody = givenValidCreateUserBody()
         val role = User.Role.User
         val userId = TableUsers.insertUser(createUserBody, role)
-        val singleModeStatistics = givenSingleModeStatistics()
         userId?.let {
+            val singleModeStatistics = givenSingleModeStatistics(it)
             val user = TableUsers.getUserById(it)
             val expected = User(
                 id = it,
@@ -37,7 +37,7 @@ class TableUsersTest : BaseDaoTest() {
     }
 
     @Test
-    fun `get user by login`() = withTables(TableUsers) {
+    fun `get user by login`() = withTables(TableUsers, TableSingleModeStatistics) {
         val login = "login"
         val email = "username@domain.com"
         val createUserBody = CreateUserBody(
@@ -51,7 +51,7 @@ class TableUsersTest : BaseDaoTest() {
             ?: throw IllegalStateException("UserId cannot be null")
         val userByLogin = TableUsers.getUserByLogin(login)
         val userByEmail = TableUsers.getUserByLogin(email)
-        val singleModeStatistics = givenSingleModeStatistics()
+        val singleModeStatistics = givenSingleModeStatistics(userId)
         val expected = User(
             id = userId,
             login = createUserBody.login,
@@ -67,7 +67,7 @@ class TableUsersTest : BaseDaoTest() {
     }
 
     @Test
-    fun `get user by login or email`() = withTables(TableUsers) {
+    fun `get user by login or email`() = withTables(TableUsers, TableSingleModeStatistics) {
         val login = "login"
         val email = "username@domain.com"
         val createUserBody = CreateUserBody(
@@ -80,7 +80,7 @@ class TableUsersTest : BaseDaoTest() {
         val userId = TableUsers.insertUser(createUserBody, role)
             ?: throw IllegalStateException("UserId cannot be null")
         val user = TableUsers.getUserByLoginOrEmail(login, email)
-        val singleModeStatistics = givenSingleModeStatistics()
+        val singleModeStatistics = givenSingleModeStatistics(userId)
         val expected = User(
             id = userId,
             login = createUserBody.login,
@@ -95,7 +95,7 @@ class TableUsersTest : BaseDaoTest() {
     }
 
     @Test
-    fun `get users`() = withTables(TableUsers) {
+    fun `get users`() = withTables(TableUsers, TableSingleModeStatistics) {
         val role = User.Role.User
         val createUserBody1 = CreateUserBody(
             login = "login",
@@ -114,7 +114,8 @@ class TableUsersTest : BaseDaoTest() {
         val user2Id = TableUsers.insertUser(createUserBody2, role)
             ?: throw IllegalStateException("UserId cannot be null")
         val actual = TableUsers.getUsers()
-        val singleModeStatistics = givenSingleModeStatistics()
+        val singleModeStatistics1 = givenSingleModeStatistics(user1Id)
+        val singleModeStatistics2 = givenSingleModeStatistics(user2Id)
         val expected1 = User(
             id = user1Id,
             login = createUserBody1.login,
@@ -123,7 +124,7 @@ class TableUsersTest : BaseDaoTest() {
             role = role.value,
             nickname = "nickname",
             country = createUserBody1.country,
-            singleModeStatistics = singleModeStatistics,
+            singleModeStatistics = singleModeStatistics1,
         )
         val expected2 = User(
             id = user2Id,
@@ -133,7 +134,7 @@ class TableUsersTest : BaseDaoTest() {
             role = role.value,
             nickname = "nickname",
             country = createUserBody2.country,
-            singleModeStatistics = singleModeStatistics,
+            singleModeStatistics = singleModeStatistics2,
         )
         assertEquals(listOf(expected1, expected2), actual)
     }
@@ -144,22 +145,23 @@ class TableUsersTest : BaseDaoTest() {
         val role = User.Role.User
         val userId = TableUsers.insertUser(createUserBody, role)
             ?: throw IllegalStateException("UserId cannot be null")
-        TableUsers.deleteUserById(userId)
+        val id = TableUsers.deleteUserById(userId)
         val users = TableUsers.getUsers()
         val singleModeStatistics = TableSingleModeStatistics.getStatistics()
+        assertEquals(userId, id)
         assertEquals(0, users.size)
         assertEquals(0, singleModeStatistics.size)
     }
 
     @Test
-    fun `update user`() = withTables(TableUsers) {
+    fun `update user`() = withTables(TableUsers, TableSingleModeStatistics) {
         val createUserBody = givenValidCreateUserBody()
         val role = User.Role.User
         val userId = TableUsers.insertUser(createUserBody, role)
             ?: throw IllegalStateException("UserId cannot be null")
         val userUpdateBody = UserUpdateBody("new nickname", "ua")
         val actual = TableUsers.updateUser(userId, userUpdateBody)
-        val singleModeStatistics = givenSingleModeStatistics()
+        val singleModeStatistics = givenSingleModeStatistics(userId)
         val expected = User(
             id = userId,
             login = createUserBody.login,

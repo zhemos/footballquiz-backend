@@ -17,7 +17,12 @@ object TableUsers : BaseDao("users"), UserDao {
     val email = varchar("email", 30)
     val nickname = varchar("nickname", 30)
     val country = varchar("country", 2)
-    val singleModeStatisticsId = reference("singleModeStatisticsId", TableSingleModeStatistics.id)
+    val singleModeStatisticsId = reference(
+        name = "singleModeStatisticsId",
+        refColumn = TableSingleModeStatistics.id,
+        onDelete = ReferenceOption.RESTRICT,
+        onUpdate = ReferenceOption.CASCADE,
+    )
 
     override fun insertUser(createUserBody: CreateUserBody, userRole: User.Role): Int? {
         val singleModeId = TableSingleModeStatistics.insertStatistics() ?: return null
@@ -35,7 +40,7 @@ object TableUsers : BaseDao("users"), UserDao {
     }
 
     override fun getUserById(userId: Int): User? {
-        return select {
+        return (TableUsers innerJoin TableSingleModeStatistics).select {
             id eq userId
         }.map {
             it.mapRowToUser()
@@ -43,7 +48,7 @@ object TableUsers : BaseDao("users"), UserDao {
     }
 
     override fun getUserByLogin(login: String): User? {
-        return select {
+        return (TableUsers innerJoin TableSingleModeStatistics).select {
             (TableUsers.login eq login) or (email eq login)
         }.map {
             it.mapRowToUser()
@@ -51,23 +56,25 @@ object TableUsers : BaseDao("users"), UserDao {
     }
 
     override fun getUserByLoginOrEmail(login: String, email: String): User? {
-        return select {
+        return (TableUsers innerJoin TableSingleModeStatistics).select {
             (TableUsers.login eq login) or (TableUsers.email eq email)
         }.map {
             it.mapRowToUser()
         }.singleOrNull()
     }
 
-    override fun deleteUserById(userId: Int) {
-        val user = getUserById(userId) ?: throw ApplicationException.DataNotFound
-        //TableSingleModeStatistics.deleteStatisticsById(user.id)
-        deleteWhere { id eq userId }
+    override fun deleteUserById(userId: Int): Int {
+        val user = getUserById(userId) ?: return -1
+        val id = deleteWhere { id eq userId }
+        TableSingleModeStatistics.deleteStatisticsById(user.singleModeStatistics.id)
+        return id
     }
 
     override fun getUsers(): List<User> {
-        return selectAll().map {
-            it.mapRowToUser()
-        }
+        return (TableUsers innerJoin TableSingleModeStatistics)
+            .selectAll().map {
+                it.mapRowToUser()
+            }
     }
 
     override fun updateUser(userId: Int, userUpdateBody: UserUpdateBody): User? {
@@ -84,8 +91,10 @@ object TableUsers : BaseDao("users"), UserDao {
 }
 
 fun ResultRow.mapRowToUser(): User {
-    //todo
-    val a = TableSingleModeStatistics.getStatisticsById(this[TableUsers.singleModeStatisticsId])
+    val singleModeStatistics = SingleModeStatistics(
+        id = this[TableUsers.singleModeStatisticsId],
+        countOfPoints = this[TableSingleModeStatistics.countOfPoints],
+    )
     return User(
         id = this[TableUsers.id],
         login = this[TableUsers.login],
@@ -94,7 +103,7 @@ fun ResultRow.mapRowToUser(): User {
         role = this[TableUsers.role],
         nickname = this[TableUsers.nickname],
         country = this[TableUsers.country],
-        singleModeStatistics = SingleModeStatistics(1, 1)
+        singleModeStatistics = singleModeStatistics
     )
 }
 
@@ -103,7 +112,7 @@ interface UserDao {
     fun getUserById(userId: Int): User?
     fun getUserByLogin(login: String): User?
     fun getUserByLoginOrEmail(login: String, email: String): User?
-    fun deleteUserById(userId: Int)
+    fun deleteUserById(userId: Int): Int
     fun getUsers(): List<User>
     fun updateUser(userId: Int, userUpdateBody: UserUpdateBody): User?
 }

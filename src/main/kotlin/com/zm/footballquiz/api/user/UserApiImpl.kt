@@ -40,8 +40,8 @@ object UserApiImpl : UserApi, KoinComponent {
         return usersDao.getUserByLoginOrEmail(login, email)
     }
 
-    override fun deleteUserById(userId: Int) {
-        usersDao.deleteUserById(userId)
+    override fun deleteUserById(userId: Int): Int {
+        return usersDao.deleteUserById(userId)
     }
 
     override fun updateUser(userId: Int, userUpdateBody: UserUpdateBody): User? {
