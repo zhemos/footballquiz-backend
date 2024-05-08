@@ -2,7 +2,7 @@ package com.zm.footballquiz.dao
 
 import com.zm.footballquiz.db.dao.TableSingleModeStatistics
 import com.zm.footballquiz.instrumentation.StatisticsInstrumentation.givenSingleModeStatistics
-import com.zm.footballquiz.instrumentation.StatisticsInstrumentation.givenSingleModeStatisticsBody
+import com.zm.footballquiz.instrumentation.StatisticsInstrumentation.givenUpdateSingleModeStatistics
 import org.junit.Test
 import org.junit.jupiter.api.TestInstance
 import kotlin.test.assertEquals
@@ -22,12 +22,11 @@ class TableSingleModeStatisticsTest : BaseDaoTest() {
 
     @Test
     fun `update statistics`() = withTables(TableSingleModeStatistics) {
-        val id = 1
         val countOfPoints = 100
-        val statisticsBody = givenSingleModeStatisticsBody(countOfPoints = countOfPoints)
+        val id = TableSingleModeStatistics.insertStatistics() ?: throw IllegalStateException("id cannot be null")
+        val updateStatistics = givenUpdateSingleModeStatistics(id = id, countOfPoints = countOfPoints)
         val statistics = givenSingleModeStatistics(id = id).copy(countOfPoints = countOfPoints)
-        TableSingleModeStatistics.insertStatistics()
-        val actual = TableSingleModeStatistics.updateStatistics(id, statisticsBody)
+        val actual = TableSingleModeStatistics.updateStatistics(updateStatistics)
         assertEquals(statistics, actual)
     }
 

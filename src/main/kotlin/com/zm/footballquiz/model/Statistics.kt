@@ -4,3 +4,8 @@ data class SingleModeStatistics(
     val id: Int,
     val countOfPoints: Int,
 )
+
+data class UpdateSingleModeStatistics(
+    val id: Int,
+    val countOfPoints: Int,
+)

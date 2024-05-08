@@ -1,7 +1,7 @@
 package com.zm.footballquiz.db.dao
 
 import com.zm.footballquiz.model.SingleModeStatistics
-import com.zm.footballquiz.model.dto.SingleModeStatisticsBody
+import com.zm.footballquiz.model.UpdateSingleModeStatistics
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 
@@ -33,13 +33,12 @@ object TableSingleModeStatistics : BaseDao("singleModeStatistics"), SingleModeSt
     }
 
     override fun updateStatistics(
-        id: Int,
-        singleModeStatisticsBody: SingleModeStatisticsBody
+        updateSingleModeStatistics: UpdateSingleModeStatistics,
     ): SingleModeStatistics? {
-        update({ TableSingleModeStatistics.id eq id }) { statement ->
-            statement[countOfPoints] = singleModeStatisticsBody.countOfPoints
+        update({ id eq updateSingleModeStatistics.id }) { statement ->
+            statement[countOfPoints] = updateSingleModeStatistics.countOfPoints
         }
-        return getStatisticsById(id)
+        return getStatisticsById(updateSingleModeStatistics.id)
     }
 
     override fun deleteStatisticsById(id: Int): Int {
@@ -56,6 +55,6 @@ interface SingleModeStatisticsDao {
     fun insertStatistics(): Int?
     fun getStatisticsById(id: Int): SingleModeStatistics?
     fun getStatistics(): List<SingleModeStatistics>
-    fun updateStatistics(id: Int, singleModeStatisticsBody: SingleModeStatisticsBody): SingleModeStatistics?
+    fun updateStatistics(updateSingleModeStatistics: UpdateSingleModeStatistics): SingleModeStatistics?
     fun deleteStatisticsById(id: Int): Int
 }

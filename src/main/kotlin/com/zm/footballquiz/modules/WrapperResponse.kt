@@ -50,6 +50,15 @@ inline fun PipelineContext<Unit, ApplicationCall>.fetchUser(
     }
 }
 
+inline fun PipelineContext<Unit, ApplicationCall>.fetchSingleModeStatistics(
+    foundStatistics: (statisticsId: Int) -> Unit
+) {
+    val principal = call.principal<JWTPrincipal>()
+    principal?.payload?.getClaim("singleModeStatisticsId")?.asInt()?.let { statisticsId ->
+        foundStatistics(statisticsId)
+    }
+}
+
 suspend inline fun <reified T : Any> PipelineContext<Unit, ApplicationCall>.receive(
     successReceive: (T) -> Unit
 ) {

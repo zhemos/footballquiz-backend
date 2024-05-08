@@ -41,6 +41,7 @@ class JwtConfig(
             .withClaim("id", user.id)
             .withClaim("login", user.login)
             .withClaim("role", user.role)
+            .withClaim("singleModeStatisticsId", user.singleModeStatistics.id)
         return CredentialsResponse(
             accessToken = createAccessToken(jwtBuilder),
             refreshToken = createRefreshToken(jwtBuilder),
