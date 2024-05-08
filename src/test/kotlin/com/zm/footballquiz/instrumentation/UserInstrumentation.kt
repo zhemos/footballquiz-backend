@@ -7,6 +7,7 @@ object UserInstrumentation {
 
     fun givenUser(id: Int = 123): User {
         val singleModeStatistics = givenSingleModeStatistics()
+        val wallet = WalletInstrumentation.givenDefaultWallet()
         return User(
             id = id,
             login = "login",
@@ -15,6 +16,7 @@ object UserInstrumentation {
             role = "user",
             nickname = "",
             country = "by",
+            wallet = wallet,
             singleModeStatistics = singleModeStatistics,
         )
     }

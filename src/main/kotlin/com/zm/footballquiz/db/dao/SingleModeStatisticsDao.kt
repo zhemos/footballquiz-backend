@@ -8,7 +8,7 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 object TableSingleModeStatistics : BaseDao("singleModeStatistics"), SingleModeStatisticsDao {
     val id = integer("id").autoIncrement()
     override val primaryKey = PrimaryKey(id)
-    val countOfPoints = integer("countOfPoints")
+    val countOfPoints = integer("points")
 
     override fun insertStatistics(): Int? {
         return insert {

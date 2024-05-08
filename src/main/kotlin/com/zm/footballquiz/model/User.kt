@@ -8,6 +8,7 @@ data class User(
     val role: String,
     val nickname: String,
     val country: String,
+    val wallet: Wallet,
     val singleModeStatistics: SingleModeStatistics,
 ) {
 

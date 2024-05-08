@@ -8,12 +8,12 @@ import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 object TableWallets : BaseDao("wallets"), WalletDao {
     val id = integer("id").autoIncrement()
     override val primaryKey = PrimaryKey(id)
-    val countOfCoins = integer("countOfCoins")
-    val countOfTickets = integer("countOfTickets")
-    val countOfEnergy = integer("countOfEnergy")
-    val countOfRedCards = integer("countOfRedCards")
-    val countOfWhistles = integer("countOfWhistles")
-    val countOfFans = integer("countOfFans")
+    val countOfCoins = integer("coins")
+    val countOfTickets = integer("tickets")
+    val countOfEnergy = integer("energy")
+    val countOfRedCards = integer("redCards")
+    val countOfWhistles = integer("whistles")
+    val countOfFans = integer("fans")
 
     override fun insertWallet(): Int? {
         return insert {

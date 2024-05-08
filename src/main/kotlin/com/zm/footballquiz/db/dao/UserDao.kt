@@ -3,8 +3,8 @@ package com.zm.footballquiz.db.dao
 import com.zm.footballquiz.model.SingleModeStatistics
 import com.zm.footballquiz.model.dto.CreateUserBody
 import com.zm.footballquiz.model.User
+import com.zm.footballquiz.model.Wallet
 import com.zm.footballquiz.model.dto.UserUpdateBody
-import com.zm.footballquiz.statuspages.ApplicationException
 import org.jetbrains.exposed.sql.*
 import org.jetbrains.exposed.sql.SqlExpressionBuilder.eq
 
@@ -17,6 +17,12 @@ object TableUsers : BaseDao("users"), UserDao {
     val email = varchar("email", 30)
     val nickname = varchar("nickname", 30)
     val country = varchar("country", 2)
+    val walletId = reference(
+        name = "walletId",
+        refColumn = TableWallets.id,
+        onDelete = ReferenceOption.RESTRICT,
+        onUpdate = ReferenceOption.CASCADE,
+    )
     val singleModeStatisticsId = reference(
         name = "singleModeStatisticsId",
         refColumn = TableSingleModeStatistics.id,
@@ -25,7 +31,8 @@ object TableUsers : BaseDao("users"), UserDao {
     )
 
     override fun insertUser(createUserBody: CreateUserBody, userRole: User.Role): Int? {
-        val singleModeId = TableSingleModeStatistics.insertStatistics() ?: return null
+        val walletId = TableWallets.insertWallet() ?: return null
+        val singleModeStatisticsId = TableSingleModeStatistics.insertStatistics() ?: return null
         return insert {
             it[login] = createUserBody.login
             it[email] = createUserBody.email
@@ -33,14 +40,15 @@ object TableUsers : BaseDao("users"), UserDao {
             it[role] = userRole.value
             it[nickname] = "nickname"//todo user#
             it[country] = createUserBody.country
-            it[singleModeStatisticsId] = singleModeId
+            it[TableUsers.walletId] = walletId
+            it[TableUsers.singleModeStatisticsId] = singleModeStatisticsId
             it[dateCreated] = System.currentTimeMillis()
             it[dateUpdated] = System.currentTimeMillis()
         }.getOrNull(id)
     }
 
     override fun getUserById(userId: Int): User? {
-        return (TableUsers innerJoin TableSingleModeStatistics).select {
+        return (TableUsers innerJoin TableSingleModeStatistics innerJoin TableWallets).select {
             id eq userId
         }.map {
             it.mapRowToUser()
@@ -48,7 +56,7 @@ object TableUsers : BaseDao("users"), UserDao {
     }
 
     override fun getUserByLogin(login: String): User? {
-        return (TableUsers innerJoin TableSingleModeStatistics).select {
+        return (TableUsers innerJoin TableSingleModeStatistics innerJoin TableWallets).select {
             (TableUsers.login eq login) or (email eq login)
         }.map {
             it.mapRowToUser()
@@ -56,7 +64,7 @@ object TableUsers : BaseDao("users"), UserDao {
     }
 
     override fun getUserByLoginOrEmail(login: String, email: String): User? {
-        return (TableUsers innerJoin TableSingleModeStatistics).select {
+        return (TableUsers innerJoin TableSingleModeStatistics innerJoin TableWallets).select {
             (TableUsers.login eq login) or (TableUsers.email eq email)
         }.map {
             it.mapRowToUser()
@@ -71,7 +79,7 @@ object TableUsers : BaseDao("users"), UserDao {
     }
 
     override fun getUsers(): List<User> {
-        return (TableUsers innerJoin TableSingleModeStatistics)
+        return (TableUsers innerJoin TableSingleModeStatistics innerJoin TableWallets)
             .selectAll().map {
                 it.mapRowToUser()
             }
@@ -91,6 +99,15 @@ object TableUsers : BaseDao("users"), UserDao {
 }
 
 fun ResultRow.mapRowToUser(): User {
+    val wallet = Wallet(
+        id = this[TableUsers.walletId],
+        countOfCoins = this[TableWallets.countOfCoins],
+        countOfTickets = this[TableWallets.countOfTickets],
+        countOfEnergy = this[TableWallets.countOfEnergy],
+        countOfRedCards = this[TableWallets.countOfRedCards],
+        countOfWhistles = this[TableWallets.countOfWhistles],
+        countOfFans = this[TableWallets.countOfFans],
+    )
     val singleModeStatistics = SingleModeStatistics(
         id = this[TableUsers.singleModeStatisticsId],
         countOfPoints = this[TableSingleModeStatistics.countOfPoints],
@@ -103,6 +120,7 @@ fun ResultRow.mapRowToUser(): User {
         role = this[TableUsers.role],
         nickname = this[TableUsers.nickname],
         country = this[TableUsers.country],
+        wallet = wallet,
         singleModeStatistics = singleModeStatistics
     )
 }

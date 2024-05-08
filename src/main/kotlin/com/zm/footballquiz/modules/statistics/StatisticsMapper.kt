@@ -1,9 +1,7 @@
 package com.zm.footballquiz.modules.statistics
 
 import com.zm.footballquiz.model.SingleModeStatistics
-import com.zm.footballquiz.model.UpdateSingleModeStatistics
 import com.zm.footballquiz.model.dto.SingleModeStatisticsResponse
-import com.zm.footballquiz.model.dto.UpdateSingleModeStatisticsBody
 import com.zm.footballquiz.model.dto.UpdateStatisticsBody
 import com.zm.footballquiz.model.dto.UpdateStatisticsType
 import com.zm.footballquiz.statuspages.ApplicationException

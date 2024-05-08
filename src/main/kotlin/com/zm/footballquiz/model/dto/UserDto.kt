@@ -12,4 +12,6 @@ data class UserResponse(
     val nickname: String,
     val country: String,
     val role: String,
+    val wallet: WalletResponse,
+    val singleModeStatistics: SingleModeStatisticsResponse,
 )
