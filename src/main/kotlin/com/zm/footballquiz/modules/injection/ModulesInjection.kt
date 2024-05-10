@@ -6,6 +6,8 @@ import com.zm.footballquiz.modules.statistics.StatisticsController
 import com.zm.footballquiz.modules.statistics.StatisticsControllerImpl
 import com.zm.footballquiz.modules.user.UserController
 import com.zm.footballquiz.modules.user.UserControllerImpl
+import com.zm.footballquiz.modules.wallet.WalletController
+import com.zm.footballquiz.modules.wallet.WalletControllerImpl
 import org.koin.dsl.module
 
 object ModulesInjection {
@@ -13,5 +15,6 @@ object ModulesInjection {
         single<AuthController> { AuthControllerImpl() }
         single<UserController> { UserControllerImpl() }
         single<StatisticsController> { StatisticsControllerImpl() }
+        single<WalletController> { WalletControllerImpl() }
     }
 }

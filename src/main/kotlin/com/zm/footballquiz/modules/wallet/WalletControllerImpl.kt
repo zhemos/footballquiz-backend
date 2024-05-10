@@ -16,7 +16,7 @@ class WalletControllerImpl : BaseController(), WalletController {
     override suspend fun updateWallet(
         id: Int,
         updateWalletBody: UpdateWalletBody
-    ): WalletResponse? {
+    ): WalletResponse? = dbQuery {
         val wallet = walletApi.getWalletById(id) ?: throw ApplicationException.DataNotFound
         val countOfCoins = updateWalletBody.countOfCoins?.toNewValue {
             return@toNewValue wallet.countOfCoins
@@ -45,6 +45,6 @@ class WalletControllerImpl : BaseController(), WalletController {
             countOfWhistles = countOfWhistles,
             countOfFans = countOfFans,
         )
-        return walletApi.updateWallet(updateWallet)?.toDto()
+        return@dbQuery walletApi.updateWallet(updateWallet)?.toDto()
     }
 }

@@ -5,6 +5,7 @@ import com.zaxxer.hikari.HikariDataSource
 import com.zm.footballquiz.config.Config
 import com.zm.footballquiz.db.dao.TableSingleModeStatistics
 import com.zm.footballquiz.db.dao.TableUsers
+import com.zm.footballquiz.db.dao.TableWallets
 import kotlinx.coroutines.newFixedThreadPoolContext
 import kotlinx.coroutines.withContext
 import org.jetbrains.exposed.sql.Database
@@ -26,8 +27,9 @@ class DatabaseProvider : DatabaseProviderContract, KoinComponent {
     override fun init() {
         Database.connect(hikari(config))
         transaction {
-            create(TableSingleModeStatistics)
             create(TableUsers)
+            create(TableSingleModeStatistics)
+            create(TableWallets)
         }
     }
 

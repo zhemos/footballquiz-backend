@@ -3,6 +3,7 @@ package com.zm.footballquiz.plugins
 import com.zm.footballquiz.modules.auth.authModule
 import com.zm.footballquiz.modules.statistics.statisticsModule
 import com.zm.footballquiz.modules.user.userModule
+import com.zm.footballquiz.modules.wallet.walletModule
 import io.ktor.server.application.*
 import io.ktor.server.auth.*
 import io.ktor.server.routing.*
@@ -14,6 +15,7 @@ fun Application.configureRouting() {
             authenticate {
                 userModule()
                 statisticsModule()
+                walletModule()
             }
         }
     }

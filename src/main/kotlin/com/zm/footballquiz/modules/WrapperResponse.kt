@@ -59,6 +59,15 @@ inline fun PipelineContext<Unit, ApplicationCall>.fetchSingleModeStatistics(
     }
 }
 
+inline fun PipelineContext<Unit, ApplicationCall>.fetchWallet(
+    foundWallet: (walletId: Int) -> Unit
+) {
+    val principal = call.principal<JWTPrincipal>()
+    principal?.payload?.getClaim("walletId")?.asInt()?.let { walletId ->
+        foundWallet(walletId)
+    }
+}
+
 suspend inline fun <reified T : Any> PipelineContext<Unit, ApplicationCall>.receive(
     successReceive: (T) -> Unit
 ) {

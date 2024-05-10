@@ -42,6 +42,7 @@ class JwtConfig(
             .withClaim("login", user.login)
             .withClaim("role", user.role)
             .withClaim("singleModeStatisticsId", user.singleModeStatistics.id)
+            .withClaim("walletId", user.wallet.id)
         return CredentialsResponse(
             accessToken = createAccessToken(jwtBuilder),
             refreshToken = createRefreshToken(jwtBuilder),
@@ -79,7 +80,7 @@ class JwtConfig(
     }
 }
 
-private const val VALIDITY_IN_MS = 1000L * 60L * 1L // 1 min
+private const val VALIDITY_IN_MS = 1000L * 60L * 5L // 5 min
 private const val REFRESH_VALIDITY_IN_MS = 3_600_000L * 24L * 60L //60 days
 
 interface TokenProvider {
