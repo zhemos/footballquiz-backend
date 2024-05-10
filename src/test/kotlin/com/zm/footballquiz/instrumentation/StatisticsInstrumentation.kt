@@ -3,8 +3,7 @@ package com.zm.footballquiz.instrumentation
 import com.zm.footballquiz.model.SingleModeStatistics
 import com.zm.footballquiz.model.UpdateSingleModeStatistics
 import com.zm.footballquiz.model.dto.UpdateSingleModeStatisticsBody
-import com.zm.footballquiz.model.dto.UpdateStatisticsBody
-import com.zm.footballquiz.model.dto.UpdateStatisticsType
+import com.zm.footballquiz.model.dto.UpdateBody
 
 object StatisticsInstrumentation {
 
@@ -27,18 +26,24 @@ object StatisticsInstrumentation {
     fun givenUpdateSingleModeStatisticsBodyOfTypeUpdate(
         value: Int = 10,
     ) = UpdateSingleModeStatisticsBody(
-        countOfPointsUpdate = UpdateStatisticsBody(value, "update"),
+        countOfPointsUpdate = UpdateBody(value, "update"),
     )
 
     fun givenUpdateSingleModeStatisticsBodyOfTypeAdd(
         value: Int = 10,
     ) = UpdateSingleModeStatisticsBody(
-        countOfPointsUpdate = UpdateStatisticsBody(value, "add"),
+        countOfPointsUpdate = UpdateBody(value, "add"),
+    )
+
+    fun givenUpdateSingleModeStatisticsBodyOfTypeRemove(
+        value: Int = 10,
+    ) = UpdateSingleModeStatisticsBody(
+        countOfPointsUpdate = UpdateBody(value, "remove"),
     )
 
     fun givenUpdateSingleModeStatisticsBodyOfTypeUnknown(
         value: Int = 10,
     ) = UpdateSingleModeStatisticsBody(
-        countOfPointsUpdate = UpdateStatisticsBody(value, "unknown"),
+        countOfPointsUpdate = UpdateBody(value, "unknown"),
     )
 }

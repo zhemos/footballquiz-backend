@@ -4,6 +4,7 @@ import com.zm.footballquiz.api.statistics.StatisticsApi
 import com.zm.footballquiz.model.UpdateSingleModeStatistics
 import com.zm.footballquiz.model.dto.SingleModeStatisticsResponse
 import com.zm.footballquiz.model.dto.UpdateSingleModeStatisticsBody
+import com.zm.footballquiz.model.dto.toNewValue
 import com.zm.footballquiz.modules.BaseController
 import com.zm.footballquiz.statuspages.ApplicationException
 import org.koin.core.component.inject

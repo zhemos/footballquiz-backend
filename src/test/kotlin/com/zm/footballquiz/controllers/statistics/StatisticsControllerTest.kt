@@ -4,10 +4,11 @@ import com.zm.footballquiz.api.statistics.StatisticsApi
 import com.zm.footballquiz.controllers.BaseControllerTest
 import com.zm.footballquiz.instrumentation.StatisticsInstrumentation.givenSingleModeStatistics
 import com.zm.footballquiz.instrumentation.StatisticsInstrumentation.givenUpdateSingleModeStatisticsBodyOfTypeAdd
+import com.zm.footballquiz.instrumentation.StatisticsInstrumentation.givenUpdateSingleModeStatisticsBodyOfTypeRemove
 import com.zm.footballquiz.instrumentation.StatisticsInstrumentation.givenUpdateSingleModeStatisticsBodyOfTypeUnknown
 import com.zm.footballquiz.instrumentation.StatisticsInstrumentation.givenUpdateSingleModeStatisticsBodyOfTypeUpdate
 import com.zm.footballquiz.model.dto.SingleModeStatisticsResponse
-import com.zm.footballquiz.model.dto.UpdateStatisticsType
+import com.zm.footballquiz.model.dto.UpdateType
 import com.zm.footballquiz.modules.statistics.StatisticsController
 import com.zm.footballquiz.modules.statistics.StatisticsControllerImpl
 import com.zm.footballquiz.statuspages.ApplicationException
@@ -44,10 +45,12 @@ class StatisticsControllerTest : BaseControllerTest() {
 
     @Test
     fun `update statics type value of`() {
-        val actualUpdate = UpdateStatisticsType.valueOf("UPDATE")
-        val actualAdd = UpdateStatisticsType.valueOf("ADD")
-        assertEquals(UpdateStatisticsType.UPDATE, actualUpdate)
-        assertEquals(UpdateStatisticsType.ADD, actualAdd)
+        val actualUpdate = UpdateType.valueOf("UPDATE")
+        val actualAdd = UpdateType.valueOf("ADD")
+        val actualRemove = UpdateType.valueOf("REMOVE")
+        assertEquals(UpdateType.UPDATE, actualUpdate)
+        assertEquals(UpdateType.ADD, actualAdd)
+        assertEquals(UpdateType.REMOVE, actualRemove)
     }
 
     @Test
@@ -76,6 +79,21 @@ class StatisticsControllerTest : BaseControllerTest() {
     fun `when update single mode statistics and type is add, return new statistics`() {
         val value = 10
         val updateStatistics = givenUpdateSingleModeStatisticsBodyOfTypeAdd(value = value)
+        val statistics = givenSingleModeStatistics(value = value)
+        coEvery { statisticsApi.getStatisticsById(any()) } returns statistics
+        coEvery { statisticsApi.updateSingleModeStatistics(any()) } returns statistics
+
+        val expected = SingleModeStatisticsResponse(value)
+        runBlocking {
+            val actual = controller.updateSingleModeStatistics(1, updateStatistics)
+            assertEquals(expected, actual)
+        }
+    }
+
+    @Test
+    fun `when update single mode statistics and type is remove, return new statistics`() {
+        val value = 10
+        val updateStatistics = givenUpdateSingleModeStatisticsBodyOfTypeRemove(value = value)
         val statistics = givenSingleModeStatistics(value = value)
         coEvery { statisticsApi.getStatisticsById(any()) } returns statistics
         coEvery { statisticsApi.updateSingleModeStatistics(any()) } returns statistics

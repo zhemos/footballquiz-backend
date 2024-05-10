@@ -1,12 +1,12 @@
 package com.zm.footballquiz.model.dto
 
 data class UpdateWalletBody(
-    val countOfCoins: Int? = null,
-    val countOfTickets: Int? = null,
-    val countOfEnergy: Int? = null,
-    val countOfRedCards: Int? = null,
-    val countOfWhistles: Int? = null,
-    val countOfFans: Int? = null,
+    val countOfCoins: UpdateBody? = null,
+    val countOfTickets: UpdateBody? = null,
+    val countOfEnergy: UpdateBody? = null,
+    val countOfRedCards: UpdateBody? = null,
+    val countOfWhistles: UpdateBody? = null,
+    val countOfFans: UpdateBody? = null,
 )
 
 data class WalletResponse(
