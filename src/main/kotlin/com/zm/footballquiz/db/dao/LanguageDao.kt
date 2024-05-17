@@ -33,6 +33,7 @@ object TableLanguages : BaseDao("languages"), LanguageDao {
 }
 
 fun ResultRow.mapRowToLanguage() = Language(
+    id = this[TableLanguages.id],
     code = this[TableLanguages.code],
     name = this[TableLanguages.name],
 )

@@ -8,6 +8,7 @@ object LanguageInstrumentation {
         code: String,
         name: String,
     ) = Language(
+        id = 1,
         code = code,
         name = name,
     )

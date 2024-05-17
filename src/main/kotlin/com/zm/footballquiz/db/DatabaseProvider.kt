@@ -3,9 +3,12 @@ package com.zm.footballquiz.db
 import com.zaxxer.hikari.HikariConfig
 import com.zaxxer.hikari.HikariDataSource
 import com.zm.footballquiz.config.Config
+import com.zm.footballquiz.db.dao.TableLanguages
 import com.zm.footballquiz.db.dao.TableSingleModeStatistics
 import com.zm.footballquiz.db.dao.TableUsers
 import com.zm.footballquiz.db.dao.TableWallets
+import com.zm.footballquiz.db.dao.category.TableCategories
+import com.zm.footballquiz.db.dao.category.TableCategoriesTranslate
 import kotlinx.coroutines.newFixedThreadPoolContext
 import kotlinx.coroutines.withContext
 import org.jetbrains.exposed.sql.Database
@@ -30,6 +33,9 @@ class DatabaseProvider : DatabaseProviderContract, KoinComponent {
             create(TableUsers)
             create(TableSingleModeStatistics)
             create(TableWallets)
+            create(TableCategories)
+            create(TableCategoriesTranslate)
+            create(TableLanguages)
         }
     }
 
