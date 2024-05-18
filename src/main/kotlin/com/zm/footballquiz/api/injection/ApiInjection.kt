@@ -1,6 +1,7 @@
 package com.zm.footballquiz.api.injection
 
 import com.zm.footballquiz.api.category.CategoryApi
+import com.zm.footballquiz.api.category.CategoryApiImpl
 import com.zm.footballquiz.api.statistics.StatisticsApi
 import com.zm.footballquiz.api.statistics.StatisticsApiImpl
 import com.zm.footballquiz.api.user.UserApi
@@ -14,6 +15,6 @@ object ApiInjection {
         single<UserApi> { UserApiImpl }
         single<StatisticsApi> { StatisticsApiImpl }
         single<WalletApi> { WalletApiImpl }
-        single<CategoryApi> { WalletApiImpl }
+        single<CategoryApi> { CategoryApiImpl }
     }
 }
