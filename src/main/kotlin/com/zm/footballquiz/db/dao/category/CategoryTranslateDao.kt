@@ -2,7 +2,6 @@ package com.zm.footballquiz.db.dao.category
 
 import com.zm.footballquiz.db.dao.BaseDao
 import com.zm.footballquiz.db.dao.TableLanguages
-import com.zm.footballquiz.db.dao.TableUsers
 import com.zm.footballquiz.model.CategoryTranslate
 import com.zm.footballquiz.model.dto.CreateCategoryTranslateBody
 import org.jetbrains.exposed.sql.*
@@ -78,6 +77,4 @@ interface CategoryTranslateDao {
     )
     fun deleteCategoryTranslateByCategoryId(categoryId: Int): Int
     fun getCount(): Long
-    //fun getCategoryTranslateByCategoryId(categoryId: Int): CategoryTranslate?
-    //fun getCategoriesTranslateByCategoryId(categoryId: Int): List<CategoryTranslate>
 }

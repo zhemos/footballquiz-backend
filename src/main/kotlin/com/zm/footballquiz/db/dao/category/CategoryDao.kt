@@ -2,7 +2,6 @@ package com.zm.footballquiz.db.dao.category
 
 import com.zm.footballquiz.db.dao.BaseDao
 import com.zm.footballquiz.db.dao.TableLanguages
-import com.zm.footballquiz.db.dao.TableUsers
 import com.zm.footballquiz.model.Category
 import com.zm.footballquiz.model.CategoryTranslate
 import com.zm.footballquiz.model.SingleCategory
