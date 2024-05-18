@@ -14,9 +14,3 @@ data class Category(
     val id: Int,
     val translates: List<CategoryTranslate>,
 )
-
-//todo ???
-class UpdateCategory(
-    val id: Int,
-
-)

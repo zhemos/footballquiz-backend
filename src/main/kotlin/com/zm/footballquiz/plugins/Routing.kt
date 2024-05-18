@@ -1,6 +1,7 @@
 package com.zm.footballquiz.plugins
 
 import com.zm.footballquiz.modules.auth.authModule
+import com.zm.footballquiz.modules.category.categoryModule
 import com.zm.footballquiz.modules.statistics.statisticsModule
 import com.zm.footballquiz.modules.user.userModule
 import com.zm.footballquiz.modules.wallet.walletModule
@@ -16,6 +17,7 @@ fun Application.configureRouting() {
                 userModule()
                 statisticsModule()
                 walletModule()
+                categoryModule()
             }
         }
     }

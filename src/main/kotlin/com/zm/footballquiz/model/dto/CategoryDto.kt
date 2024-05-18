@@ -1,5 +1,9 @@
 package com.zm.footballquiz.model.dto
 
+data class UpdateCategoryBody(
+    val id: Int,
+)
+
 data class CreateCategoryTranslateBody(
     val name: String,
     val description: String,
@@ -8,4 +12,8 @@ data class CreateCategoryTranslateBody(
 
 data class CreateCategoryBody(
     val translate: List<CreateCategoryTranslateBody>,
+)
+
+data class CategoryResponse(
+    val id: Int,
 )
